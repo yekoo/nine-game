@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 Game</title>
+    <script
+			  src="https://code.jquery.com/jquery-3.5.1.js"
+			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+              crossorigin="anonymous"></script>
+    <script src="./script.js" defer></script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <details class="todo">
+        <summary class="todo__summ">TODO</summary>
+        <ul class="todo__items">
+            <li>сделать хранение мастей как буквы, а не как символы</li>
+            <li>все действия и анимации разместить в функциях</li>
+            <li>Построить карты текущего игрока на картах снизу</li>
+            <li>Построить карты остальных игроков рубашками вверх</li>
+            <li>пока разработка, хозяин девятки и есть играющий</li>
+            <li class="todo__done">Найти игрока ходящего первым</li>
+            <li>Вставлять масти аппендом из массива (и символ и класс цвета)</li>
+        </ul>
+    </details>
+
+    <div class="center">
+
+        <div class="table">
+            <div class="kind__column">
+                <div class="card table__card">9 <div class="bk">♠</div></div>
+            </div>
+            <div class="kind__column">
+                <div class="card table__card">9 <div class="bk">♣</div></div>
+            </div>
+            <div class="kind__column">
+                <div class="card table__card">9 <div class="rk">♥</div></div>
+            </div>
+            <div class="kind__column">
+                <div class="card table__card">9 <div class="rk">♦</div></div>
+            </div>
+        </div>
+
+        <div class="opponentHand hand__top">
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <!--<div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>-->
+        </div>
+        <div class="opponentHand hand__rite">
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <!--<div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>-->
+        </div>
+        <div class="opponentHand hand__left">
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <!--<div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>
+            <div class="card opponent__card"></div>-->
+        </div>
+
+        <div class="user__hand">
+            <!--<div class="card user__card">7 <div class="bk">♠</div></div>
+            <div class="card user__card">8 <div class="bk">♣</div></div>
+            <div class="card user__card">9 <div class="rk">♥</div></div>
+            <div class="card user__card">10 <div class="bk">♠</div></div>
+            <div class="card user__card">J <div class="rk">♦</div></div>
+            <div class="card user__card">Q <div class="rk">♦</div></div>
+            <div class="card user__card">K <div class="rk">♦</div></div>
+            <div class="card user__card">A <div class="rk">♦</div></div>-->
+        </div>
+
+
+        
+    </div>
+</body>
+</html>

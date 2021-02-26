@@ -1,0 +1,188 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.center {
+  border: 1px solid orange;
+  margin-left: calc(50% - 40vw);
+  margin-right: calc(50% - 40vw);
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.table {
+  position: absolute;
+  background: #2b1;
+  margin: auto;
+  left: 10%;
+  right: 10%;
+  top: 12%;
+  bottom: 16%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.opponentHand {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+}
+
+.hand__top {
+  top: 0;
+  margin: 0 auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.hand__top .opponent__card:nth-last-child(1) {
+  margin-right: -50px;
+}
+
+.hand__top .opponent__card {
+  margin-left: -50px;
+  margin-top: -70px;
+}
+
+.hand__rite {
+  right: 0;
+  height: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: auto 0;
+}
+
+.hand__rite .opponent__card {
+  margin: -50px 0;
+  margin-right: -40px;
+}
+
+.hand__left {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
+  left: 0;
+  margin: auto 0;
+}
+
+.hand__left .opponent__card {
+  margin: -50px 0;
+  margin-left: -40px;
+}
+
+.card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid grey;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 5px;
+}
+
+.card .rk {
+  color: red;
+}
+
+.card .bk {
+  color: black;
+}
+
+.opponent__card {
+  background: pink;
+}
+
+.user__hand {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  bottom: -50px;
+  width: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  /*.user__card::first-letter{
+        color: red;
+    }*/
+}
+
+.user__hand .user__card {
+  margin-right: -50px;
+  -webkit-transition: margin .3s;
+  transition: margin .3s;
+}
+
+.user__hand .user__card:nth-last-child(1) {
+  margin-right: 0;
+}
+
+.user__hand .user__card:hover {
+  margin-top: -24px;
+}
+
+.todo {
+  position: absolute;
+  width: 300px;
+  z-index: 5;
+}
+
+.todo__summ:hover {
+  background: #b0b0b0;
+}
+
+.todo__summ {
+  background: #bbb;
+  padding: 4px;
+}
+
+.todo__items {
+  background: #ccc;
+  margin: 0;
+  font-size: 14px;
+}
+
+.todo__items li:hover {
+  background: #ddd;
+}
+
+.todo__items li {
+  padding: 4px 12px;
+}
+
+.todo__done {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.todo__done:hover {
+  background: #ccc !important;
+}
+
+.todo[open] {
+  -webkit-box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+          box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+}
+/*# sourceMappingURL=style.css.map */

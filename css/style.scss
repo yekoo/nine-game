@@ -1,0 +1,112 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+.center{
+    border: 1px solid orange;
+    //padding-left:  calc(50% - 40vw);
+    //padding-right: calc(50% - 40vw);
+    margin-left:  calc(50% - 40vw);
+    margin-right: calc(50% - 40vw);
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+.table{
+    position: absolute;
+    background: #2b1;
+    margin: auto;
+    left: 10%;
+    right: 10%;
+    top: 12%;
+    bottom: 16%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.opponentHand{
+    display: flex;
+    position: absolute;
+
+}
+
+.hand__top{
+    top: 0;
+    margin: 0 auto;
+    justify-content: center;
+    width: 100%;
+    .opponent__card:nth-last-child(1){
+        margin-right: -50px;
+    }
+    .opponent__card{
+        margin-left: -50px;
+        margin-top: -70px;
+    }
+}
+.hand__rite{
+    right: 0;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto 0;
+    .opponent__card{
+        margin: -50px 0;
+        margin-right: -40px;
+    }
+}
+.hand__left{
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    left: 0;
+    margin: auto 0;
+    .opponent__card{
+        margin: -50px 0;
+        margin-left: -40px;
+    }
+}
+
+.card{
+    width: 80px;
+    height: 120px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid grey;
+    box-sizing: border-box;
+    padding: 5px;
+
+    .rk{
+        color: red;
+    }
+    .bk{
+        color: black;
+    }
+}
+.opponent__card{
+    background: pink;
+}
+
+.user__hand{
+    display: flex;
+    position: absolute;
+    bottom: -50px;
+    width: 100%;
+    justify-content: center;
+
+    /*.user__card::first-letter{
+        color: red;
+    }*/
+    .user__card{
+        margin-right: -50px;
+        transition: margin .3s;
+    }
+    .user__card:nth-last-child(1){
+        margin-right: 0;
+    }
+    .user__card:hover{
+        margin-top: -24px;
+    }
+}
+
+@import 'todo';
