@@ -10,7 +10,7 @@ body{
     margin-right: calc(50% - 40vw);
     position: relative;
     overflow: hidden;
-    min-height: 500px;
+    min-height: 640px;
   }
 
 .table{
@@ -24,6 +24,47 @@ body{
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    .kind__column{
+        border: 1px solid red;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .column__cell{
+        display: flex;
+        flex-direction: column;
+    }
+    .column__cell_top{
+        align-items: flex-end;
+    }
+    .column__cell_mid{
+        position: relaive;
+        
+        .card_9{
+            z-index: 2;
+        }
+    }
+    .column__cell_bot{
+        align-items: flex-start;
+        flex-direction: column-reverse;
+    }
+    &__card{
+        margin: -30px 0;
+        justify-content: space-between;
+        flex-direction: column;
+        display: flex;
+        
+
+        .card__label{
+            position: relative;
+        }
+        .card__label_bot{
+            transform: rotate(180deg);
+        }
+    }
 }
 .opponentHand{
     display: flex;
@@ -67,7 +108,9 @@ body{
     }
 }
 
+
 .card{
+    z-index: 1;
     width: 80px;
     height: 120px;
     background: white;

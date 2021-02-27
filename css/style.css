@@ -9,7 +9,7 @@ body {
   margin-right: calc(50% - 40vw);
   position: relative;
   overflow: hidden;
-  min-height: 500px;
+  min-height: 640px;
 }
 
 .table {
@@ -28,6 +28,81 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.table .kind__column {
+  border: 1px solid red;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.table .column__cell {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.table .column__cell_top {
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.table .column__cell_mid {
+  position: relaive;
+}
+
+.table .column__cell_mid .card_9 {
+  z-index: 2;
+}
+
+.table .column__cell_bot {
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+}
+
+.table__card {
+  margin: -30px 0;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.table__card .card__label {
+  position: relative;
+}
+
+.table__card .card__label_bot {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
 }
 
 .opponentHand {
@@ -92,6 +167,7 @@ body {
 }
 
 .card {
+  z-index: 1;
   width: 80px;
   height: 120px;
   background: white;
@@ -162,6 +238,7 @@ body {
   background: #ccc;
   margin: 0;
   font-size: 14px;
+  padding: 4px 0;
 }
 
 .todo__items li:hover {
@@ -172,12 +249,13 @@ body {
   padding: 4px 12px;
 }
 
-.todo__done {
+.todo__items_done {
   text-decoration: line-through;
-  color: grey;
+  color: #aaa;
+  padding: 0 12px !important;
 }
 
-.todo__done:hover {
+.todo__items_done:hover {
   background: #ccc !important;
 }
 

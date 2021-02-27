@@ -1,8 +1,8 @@
 $((e)=>{
-    //alert("JQ LOADED");
-    initGame()
+    initGame(4);
 })
 
+var playersTotal;
 var cardKindsLetters = ["c","s","h","d"];
 var cardKinds = ["♠","♣","♥","♦"];
 var cardKindIdx = [0,1,2,3];
@@ -18,16 +18,19 @@ var stack = buildStack();
 var playerHands, currentPlayer;
 
 
-function initGame(){
+function initGame(playersCount){
+    playersTotal = playersCount;
     shakeStack(stack);
     //alert(stack);
-    playerHands = divideCards(4);
+    playerHands = divideCards(playersTotal);
     //alert( playerHands.join("\n") );
     currentPlayer = findFirstPlayer();
-    console.log(4);
     //alert("First player: "+currentPlayer);
     buildCurrentPlayerHand();
-    buildOpponentHands();
+
+    let oppHands = getActiveHands(playersTotal);
+    for(let i=0; i<oppHands.length; i++)
+        buildOpponentHands(oppHands[i], i+1);
 }
 
 function buildStack(){
@@ -40,6 +43,7 @@ function buildStack(){
     }
     return arr;
 }
+
 function shakeStack(arr){
     let shaked = [];
 
@@ -72,31 +76,40 @@ function buildCurrentPlayerHand(){
     let userHand = $(".user__hand");
     
     for(let i=0; i<curPlayerHand.length; i++){
-        //  <div class="card user__card">7 <div class="bk">♠</div></div>
         let cardStr = curPlayerHand[i].join("");
         let cardName = cardStr.length==2 ? cardStr.substr(0,1) : cardStr.substr(0,2);
-        // let cardKind = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
         let card = $('<div class="card user__card">');
         card.text(cardName);
-        // card.append('<div class="rk">'+cardKind+'</div>');
         let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
         card.append(kindElements[kindIndex]);
         userHand.append(card);
     }
-    alert(currentPlayer+" player hand: "+curPlayerHand);
 }
 
-function buildOpponentHands(){
+function buildOpponentHands(hand, index){
     console.log("player hands: "+playerHands.join("\n"));
 
     `  для каждой руки оппонента нужно сделать свою функцию
        и в ней запускать оппонентскую строилку руки
-       и устроить автоматическую выбиралку рук в зависимости от количества оппонентов`
+       и устроить автоматическую выбиралку рук в зависимости от количества оппонентов
+       
+       нет, в атрибуте указывать руку, в которую класть карты`
 
-    let curPlayerHand = [ ... playerHands[currentPlayer]];
+    let curPlayerHand = [ ... playerHands[index]];
     let userHand = $(".user__hand");
     for(let i=0; i<curPlayerHand.length; i++){
         let card = $('<div class="card opponent__card">');
-        // userHand.append(card);
+        $("#"+hand).append(card);
+    }
+}
+
+function getActiveHands(count){
+    switch(count){
+        case 2:
+            return ["opp__hand_top"];
+        case 3:
+            return ["opp__hand_right", "opp__hand_left"];
+        case 4:
+            return ["opp__hand_top", "opp__hand_right", "opp__hand_left"];
     }
 }

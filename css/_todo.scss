@@ -13,6 +13,7 @@
         background: #ccc;
         margin: 0;
         font-size: 14px;
+        padding: 4px 0;
         li:hover{
             background: #ddd;
         }
@@ -20,13 +21,14 @@
             padding: 4px 12px;
         }
 
-    }
-    &__done{
-        text-decoration: line-through;
-        color: grey;
-    }
-    &__done:hover{
-        background: #ccc!important;
+        &_done{
+            text-decoration: line-through;
+            color: #aaa;
+            padding: 0 12px!important;
+        }
+        &_done:hover{
+            background: #ccc!important;
+        }
     }
 }
 .todo[open]{

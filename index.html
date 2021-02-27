@@ -15,13 +15,17 @@
     <details class="todo">
         <summary class="todo__summ">TODO</summary>
         <ul class="todo__items">
-            <li class="todo__done">сделать хранение мастей как буквы, а не как символы</li>
+            <li class="todo__items_done">сделать хранение мастей как буквы, а не как символы</li>
             <li>все действия и анимации разместить в функциях</li>
-            <li class="todo__done">Построить карты текущего игрока на картах снизу</li>
-            <li>Построить карты остальных игроков рубашками вверх</li>
+            <li class="todo__items_done">Построить карты текущего игрока на картах снизу</li>
+            <li class="todo__items_done">Построить карты остальных игроков рубашками вверх</li>
             <li>пока разработка, хозяин девятки и есть играющий</li>
-            <li class="todo__done">Найти игрока ходящего первым</li>
-            <li class="todo__done">Вставлять масти аппендом из массива (и символ и класс цвета)</li>
+            <li class="todo__items_done">Найти игрока ходящего первым</li>
+            <li class="todo__items_done">Вставлять масти аппендом из массива (и символ и класс цвета)</li>
+            <li class="todo__items_done">Сделать раздачу на 2 и 3 игрока</li>
+            <li>Пересмотреть расположение карт на столе:</li>
+            <li> = 3 ячейки в каждой масти, у нижней сделать перевернутое выравнивание контента, тобы свежие отображались выше без z-index</li>
+            <li>добавить на карты перевернутое имя/масть</li>
         </ul>
     </details>
 
@@ -29,59 +33,100 @@
 
         <div class="table">
             <div class="kind__column">
-                <div class="card table__card">9 <div class="bk">♠</div></div>
+                <div class="card table__card">
+                    <div class="card__label">9 <div class="bk">♠</div></div>
+                    <div class="card__label card__label_bot">9 <div class="bk">♠</div></div>
+                </div>
             </div>
+
             <div class="kind__column">
-                <div class="card table__card">9 <div class="bk">♣</div></div>
+                <div class="card table__card">
+                    <div class="card__label">9 <div class="bk">♣</div></div>
+                    <div class="card__label card__label_bot">9 <div class="bk">♣</div></div>
+                </div>
             </div>
+
             <div class="kind__column">
-                <div class="card table__card">9 <div class="rk">♥</div></div>
+                <div class="column__cell column__cell_top">
+                    <div class="card table__card">
+                        <div class="card__label">J <div class="rk">♥</div></div>
+                        <div class="card__label card__label_bot">J <div class="rk">♥</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">10 <div class="rk">♥</div></div>
+                        <div class="card__label card__label_bot">10 <div class="rk">♥</div></div>
+                    </div>
+                </div>
+
+                <div class="column__cell column__cell_mid">
+                    <div class="card table__card card_9">
+                        <div class="card__label">9 <div class="rk">♥</div></div>
+                        <div class="card__label card__label_bot">9 <div class="rk">♥</div></div>
+                    </div>
+                </div>
+
+                <div class="column__cell column__cell_bot">
+                    <div class="card table__card">
+                        <div class="card__label">8 <div class="rk">♥</div></div>
+                        <div class="card__label card__label_bot">8 <div class="rk">♥</div></div>
+                    </div>
+                </div>
             </div>
+
             <div class="kind__column">
-                <div class="card table__card">9 <div class="rk">♦</div></div>
+                <div class="column__cell column__cell_top">
+                    <div class="card table__card">
+                        <div class="card__label">A <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">A <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">K <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">K <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">Q <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">Q <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">J <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">J <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">10 <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">10 <div class="rk">♦</div></div>
+                    </div>
+                </div>
+
+                <div class="column__cell column__cell_mid">
+                    <div class="card table__card card_9">
+                        <div class="card__label">9 <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">9 <div class="rk">♦</div></div>
+                    </div>
+                </div>
+
+                <div class="column__cell column__cell_bot">
+                    <div class="card table__card">
+                        <div class="card__label">6 <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">6 <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">7 <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">7 <div class="rk">♦</div></div>
+                    </div>
+                    <div class="card table__card">
+                        <div class="card__label">8 <div class="rk">♦</div></div>
+                        <div class="card__label card__label_bot">8 <div class="rk">♦</div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="opponentHand hand__top">
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <!--<div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>-->
-        </div>
-        <div class="opponentHand hand__rite">
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <!--<div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>-->
-        </div>
-        <div class="opponentHand hand__left">
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <!--<div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>
-            <div class="card opponent__card"></div>-->
-        </div>
+        <div class="opponentHand hand__top" id="opp__hand_top"></div>
+        <div class="opponentHand hand__rite" id="opp__hand_right"></div>
+        <div class="opponentHand hand__left" id="opp__hand_left"></div>
 
         <div class="user__hand">
-            <!--<div class="card user__card">7 <div class="bk">♠</div></div>
-            <div class="card user__card">8 <div class="bk">♣</div></div>
-            <div class="card user__card">9 <div class="rk">♥</div></div>
-            <div class="card user__card">10 <div class="bk">♠</div></div>
-            <div class="card user__card">J <div class="rk">♦</div></div>
-            <div class="card user__card">Q <div class="rk">♦</div></div>
-            <div class="card user__card">K <div class="rk">♦</div></div>
-            <div class="card user__card">A <div class="rk">♦</div></div>-->
+            
         </div>
 
 
