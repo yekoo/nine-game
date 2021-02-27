@@ -42,7 +42,7 @@ body{
     }
     .column__cell_mid{
         position: relaive;
-        
+
         .card_9{
             z-index: 2;
         }
@@ -143,6 +143,9 @@ body{
     .user__card{
         margin-right: -50px;
         transition: margin .3s;
+        >*{
+            pointer-events: none;
+        }
     }
     .user__card:nth-last-child(1){
         margin-right: 0;

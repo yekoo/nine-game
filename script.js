@@ -1,7 +1,8 @@
 $((e)=>{
-    initGame(4);
+    initGame(2);
 })
 
+var tableColumns;
 var playersTotal;
 var cardKindsLetters = ["c","s","h","d"];
 var cardKinds = ["♠","♣","♥","♦"];
@@ -31,6 +32,7 @@ function initGame(playersCount){
     let oppHands = getActiveHands(playersTotal);
     for(let i=0; i<oppHands.length; i++)
         buildOpponentHands(oppHands[i], i+1);
+        tableColumns = $(".kind__column");
 }
 
 function buildStack(){
@@ -82,6 +84,10 @@ function buildCurrentPlayerHand(){
         card.text(cardName);
         let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
         card.append(kindElements[kindIndex]);
+        card.data("kind", kindIndex);
+        card.data("name", cardName);
+        console.log("Kind index: "+kindIndex);
+        card.click( cardClick );
         userHand.append(card);
     }
 }
@@ -112,4 +118,22 @@ function getActiveHands(count){
         case 4:
             return ["opp__hand_top", "opp__hand_right", "opp__hand_left"];
     }
+}
+
+
+
+function cardClick(e){
+    let cardKind = $(e.target).data("kind");
+    let properSide = $(e.target).data("name").match(/\d+/);
+    let numSide = properSide=="6" || properSide=="7" || properSide=="8";
+    let nineCard = numSide=="9";
+    
+    let columnSide;
+    if(numSide)
+        columnSide = ".column__cell_bot";
+    else if(nineCard)
+        columnSide = ".column__cell_mid";
+    else
+        columnSide = ".column__cell_top";
+    $(tableColumns[cardKind]).find(columnSide).get(0).append(e.target);
 }

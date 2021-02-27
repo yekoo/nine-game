@@ -211,6 +211,10 @@ body {
   transition: margin .3s;
 }
 
+.user__hand .user__card > * {
+  pointer-events: none;
+}
+
 .user__hand .user__card:nth-last-child(1) {
   margin-right: 0;
 }
@@ -253,6 +257,7 @@ body {
   text-decoration: line-through;
   color: #aaa;
   padding: 0 12px !important;
+  font-size: 11px !important;
 }
 
 .todo__items_done:hover {

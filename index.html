@@ -23,9 +23,12 @@
             <li class="todo__items_done">Найти игрока ходящего первым</li>
             <li class="todo__items_done">Вставлять масти аппендом из массива (и символ и класс цвета)</li>
             <li class="todo__items_done">Сделать раздачу на 2 и 3 игрока</li>
-            <li>Пересмотреть расположение карт на столе:</li>
-            <li> = 3 ячейки в каждой масти, у нижней сделать перевернутое выравнивание контента, тобы свежие отображались выше без z-index</li>
-            <li>добавить на карты перевернутое имя/масть</li>
+            <li class="todo__items_done">Пересмотреть расположение карт на столе:</li>
+            <li class="todo__items_done"> = 3 ячейки в каждой масти, у нижней сделать перевернутое выравнивание контента, тобы свежие отображались выше без z-index</li>
+            <li class="todo__items_done">добавить на карты перевернутое имя/масть</li>
+            <li class="todo__items_done">Написать функцию добавления карт на стол (сверху и снизу)</li>
+            <li class="todo__items_done">Написать функцию определения колонки для добавляемой карты</li>
+            <li>Переписать именования карт - заменить буквенные имена карт на цифровые</li>
         </ul>
     </details>
 
@@ -33,17 +36,25 @@
 
         <div class="table">
             <div class="kind__column">
-                <div class="card table__card">
-                    <div class="card__label">9 <div class="bk">♠</div></div>
-                    <div class="card__label card__label_bot">9 <div class="bk">♠</div></div>
+                <div class="column__cell column__cell_top"></div>
+                <div class="column__cell column__cell_mid">
+                    <div class="card table__card">
+                        <div class="card__label">9 <div class="bk">♠</div></div>
+                        <div class="card__label card__label_bot">9 <div class="bk">♠</div></div>
+                    </div>
                 </div>
+                <div class="column__cell column__cell_bot"></div>
             </div>
 
             <div class="kind__column">
-                <div class="card table__card">
-                    <div class="card__label">9 <div class="bk">♣</div></div>
-                    <div class="card__label card__label_bot">9 <div class="bk">♣</div></div>
+                <div class="column__cell column__cell_top"></div>
+                <div class="column__cell column__cell_mid">
+                    <div class="card table__card">
+                        <div class="card__label">9 <div class="bk">♣</div></div>
+                        <div class="card__label card__label_bot">9 <div class="bk">♣</div></div>
+                    </div>
                 </div>
+                <div class="column__cell column__cell_bot"></div>
             </div>
 
             <div class="kind__column">
