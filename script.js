@@ -5,13 +5,14 @@ $((e)=>{
 
 var cardKindsLetters = ["c","s","h","d"];
 var cardKinds = ["♠","♣","♥","♦"];
+var cardKindIdx = [0,1,2,3];
 var kindElements = [
     '<div class="bk">♠</div>',
     '<div class="bk">♣</div>',
     '<div class="rk">♥</div>',
     '<div class="rk">♦</div>',
 ];
-var kindbub = "♦";
+var kindbub = 3;
 var cardNames = ["6","7","8","9","10","J","Q","K","A"];
 var stack = buildStack();
 var playerHands, currentPlayer;
@@ -23,15 +24,18 @@ function initGame(){
     playerHands = divideCards(4);
     //alert( playerHands.join("\n") );
     currentPlayer = findFirstPlayer();
+    console.log(4);
     //alert("First player: "+currentPlayer);
     buildCurrentPlayerHand();
+    buildOpponentHands();
 }
 
 function buildStack(){
     let arr = [];
     for(let k=0; k<4; k++){
         for(let n=0; n<9; n++){
-            arr.push(cardNames[n]+cardKinds[k]);
+            // arr.push(cardNames[n]+cardKinds[k]);
+            arr.push(cardNames[n]+cardKindIdx[k]);
         }
     }
     return arr;
@@ -57,8 +61,8 @@ function divideCards(playersNum){
 
 function findFirstPlayer(){
     for(let i=0; i<playerHands.length; i++){
-        let alCards = playerHands[i].join("");
-        if(alCards.indexOf(9+kindbub)>=0)
+        let alCards = playerHands[i].join(",");
+        if(alCards.indexOf("9"+kindbub)>=0)
             return i;
     }
 }
@@ -66,19 +70,33 @@ function findFirstPlayer(){
 function buildCurrentPlayerHand(){
     let curPlayerHand = [ ... playerHands[currentPlayer]];
     let userHand = $(".user__hand");
-    console.log("HAND: "+userHand);
-    console.log();
+    
     for(let i=0; i<curPlayerHand.length; i++){
         //  <div class="card user__card">7 <div class="bk">♠</div></div>
         let cardStr = curPlayerHand[i].join("");
         let cardName = cardStr.length==2 ? cardStr.substr(0,1) : cardStr.substr(0,2);
-        let cardKind = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
+        // let cardKind = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
         let card = $('<div class="card user__card">');
         card.text(cardName);
-        card.append('<div class="rk">'+cardKind+'</div>');
-        //let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
-        //card.append(kindElements[]);
+        // card.append('<div class="rk">'+cardKind+'</div>');
+        let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
+        card.append(kindElements[kindIndex]);
         userHand.append(card);
     }
     alert(currentPlayer+" player hand: "+curPlayerHand);
+}
+
+function buildOpponentHands(){
+    console.log("player hands: "+playerHands.join("\n"));
+
+    `  для каждой руки оппонента нужно сделать свою функцию
+       и в ней запускать оппонентскую строилку руки
+       и устроить автоматическую выбиралку рук в зависимости от количества оппонентов`
+
+    let curPlayerHand = [ ... playerHands[currentPlayer]];
+    let userHand = $(".user__hand");
+    for(let i=0; i<curPlayerHand.length; i++){
+        let card = $('<div class="card opponent__card">');
+        // userHand.append(card);
+    }
 }
