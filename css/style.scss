@@ -37,19 +37,25 @@ body{
         display: flex;
         flex-direction: column;
     }
+
     .column__cell_top{
-        align-items: flex-end;
+        // align-items: flex-end;
+        justify-content: flex-end;
+        flex-grow: 5;
     }
     .column__cell_mid{
         position: relaive;
+        flex-grow: 1;
 
         .card_9{
-            z-index: 2;
+            // z-index: 3;
         }
     }
     .column__cell_bot{
-        align-items: flex-start;
-        flex-direction: column-reverse;
+        flex-grow: 3;
+        //align-items: flex-start;
+        justify-content: flex-start;
+        // flex-direction: column-reverse;
     }
     &__card{
         margin: -30px 0;

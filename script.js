@@ -81,9 +81,21 @@ function buildCurrentPlayerHand(){
         let cardStr = curPlayerHand[i].join("");
         let cardName = cardStr.length==2 ? cardStr.substr(0,1) : cardStr.substr(0,2);
         let card = $('<div class="card user__card">');
-        card.text(cardName);
+
+        //card.text(cardName);
         let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
-        card.append(kindElements[kindIndex]);
+
+        //card.append(kindElements[kindIndex]);
+        card.append(
+            '<div class="card__label">'+cardName+
+            '<div class="rk">'+kindElements[kindIndex]+'</div></div>'
+        );
+        card.append(
+            '<div class="card__label card__label_bot">'+
+            cardName+'<div class="rk">'+kindElements[kindIndex]+
+            '</div></div>'
+        );
+
         card.data("kind", kindIndex);
         card.data("name", cardName);
         console.log("Kind index: "+kindIndex);
@@ -127,13 +139,19 @@ function cardClick(e){
     let properSide = $(e.target).data("name").match(/\d+/);
     let numSide = properSide=="6" || properSide=="7" || properSide=="8";
     let nineCard = numSide=="9";
+
+    $(e.target).removeClass("user__card");
+    $(e.target).addClass("table__card");
     
+    let pendDir = "append";;
     let columnSide;
-    if(numSide)
+    if(numSide){
         columnSide = ".column__cell_bot";
-    else if(nineCard)
+    }else if(nineCard){
         columnSide = ".column__cell_mid";
-    else
+    }else{
         columnSide = ".column__cell_top";
-    $(tableColumns[cardKind]).find(columnSide).get(0).append(e.target);
+        pendDir = "prepend";
+    }
+    $(tableColumns[cardKind]).find(columnSide).get(0)[pendDir](e.target);
 }
