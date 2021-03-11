@@ -4,7 +4,7 @@ $((e)=>{
 
 var tableColumns;
 var playersTotal;
-var cardKindsLetters = ["c","s","h","d"];
+// var cardKindsLetters = ["c","s","h","d"];
 var cardKinds = ["♠","♣","♥","♦"];
 var cardKindIdx = [0,1,2,3];
 var kindElements = [
@@ -15,24 +15,27 @@ var kindElements = [
 ];
 var kindbub = 3;
 var cardNames = ["6","7","8","9","10","J","Q","K","A"];
-var stack = buildStack();
+//  добавлять в карты нужно не строки выше, а их ИНДЕКСЫ
+var cardNamesIdx = [0,1,2,3,4,5,6,7,8];
+var stack;
 var playerHands, currentPlayer;
+
+var waitingCards;
 
 
 function initGame(playersCount){
+    waitingCards = [];
+    stack = buildStack();
     playersTotal = playersCount;
     shakeStack(stack);
-    //alert(stack);
     playerHands = divideCards(playersTotal);
-    //alert( playerHands.join("\n") );
     currentPlayer = findFirstPlayer();
-    //alert("First player: "+currentPlayer);
     buildCurrentPlayerHand();
 
     let oppHands = getActiveHands(playersTotal);
     for(let i=0; i<oppHands.length; i++)
         buildOpponentHands(oppHands[i], i+1);
-        tableColumns = $(".kind__column");
+    tableColumns = $(".kind__column");
 }
 
 function buildStack(){
@@ -40,9 +43,11 @@ function buildStack(){
     for(let k=0; k<4; k++){
         for(let n=0; n<9; n++){
             // arr.push(cardNames[n]+cardKinds[k]);
-            arr.push(cardNames[n]+cardKindIdx[k]);
+            // arr.push(cardNamesIdx[n]+""+cardKindIdx[k]);
+            arr.push(cardKindIdx[k]+""+cardNamesIdx[n]);
         }
     }
+    console.log("CARDS STACK:"+arr);
     return arr;
 }
 
@@ -68,24 +73,28 @@ function divideCards(playersNum){
 function findFirstPlayer(){
     for(let i=0; i<playerHands.length; i++){
         let alCards = playerHands[i].join(",");
-        if(alCards.indexOf("9"+kindbub)>=0)
+        console.log("=== FIRST "+alCards);
+        if(alCards.indexOf("3"+3)>=0)
             return i;
     }
 }
 
 function buildCurrentPlayerHand(){
+    console.log(currentPlayer, playerHands);
     let curPlayerHand = [ ... playerHands[currentPlayer]];
+
+    curPlayerHand = sortHandCards(curPlayerHand);
+
     let userHand = $(".user__hand");
     
     for(let i=0; i<curPlayerHand.length; i++){
         let cardStr = curPlayerHand[i].join("");
-        let cardName = cardStr.length==2 ? cardStr.substr(0,1) : cardStr.substr(0,2);
+        
         let card = $('<div class="card user__card">');
+        let cardName = cardNames[ cardStr.substr(1,1) ];
+        // let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
+        let kindIndex = cardStr.substr(0,1);
 
-        //card.text(cardName);
-        let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
-
-        //card.append(kindElements[kindIndex]);
         card.append(
             '<div class="card__label">'+cardName+
             '<div class="rk">'+kindElements[kindIndex]+'</div></div>'
@@ -100,6 +109,7 @@ function buildCurrentPlayerHand(){
         card.data("name", cardName);
         console.log("Kind index: "+kindIndex);
         card.click( cardClick );
+        //card
         userHand.append(card);
     }
 }
@@ -135,11 +145,13 @@ function getActiveHands(count){
 
 
 function cardClick(e){
+
+    $(e.target).off("click");
     let cardKind = $(e.target).data("kind");
     let properSide = $(e.target).data("name").match(/\d+/);
     let numSide = properSide=="6" || properSide=="7" || properSide=="8";
-    let nineCard = numSide=="9";
-
+    let nineCard = properSide=="9";
+    console.log("Card kind: "+$(e.target).data("name"));
     $(e.target).removeClass("user__card");
     $(e.target).addClass("table__card");
     
@@ -148,10 +160,88 @@ function cardClick(e){
     if(numSide){
         columnSide = ".column__cell_bot";
     }else if(nineCard){
+        $(e.target).addClass("card_9");
         columnSide = ".column__cell_mid";
     }else{
         columnSide = ".column__cell_top";
         pendDir = "prepend";
     }
     $(tableColumns[cardKind]).find(columnSide).get(0)[pendDir](e.target);
+
+    waitingCards = getNextMoveCards();
+    //console.log("WAITING CARDS: ",waitingCards);
+    let putNow = checkPlayersHandCards( playerHands[currentPlayer] );   //  put players card array as attr
+    //console.log(currentPlayer + "OWN CARDS: ", putNow);
+    console.log("waiting:",waitingCards,"current:", playerHands[currentPlayer]);
+}
+
+function sortHandCards(arr){
+    arr.sort( (a, b) => a - b)
+    return arr;
+}
+
+//  получить возможные карты
+function getNextMoveCards(){
+    //  пройти по всем колонкам:
+    let columns = $(".kind__column");
+    let waitingCards = [];
+    for( let i=0; i<4; i++){
+        waitingCards.push([]);
+        let col = columns.get(i);
+        // console.log("::: "+$(col).find(".column__cell_mid").children().length);
+        if($(col).find(".column__cell_mid").children().length==1){
+            waitingCards[i].push("9");
+            //console.log(">>>");
+            continue;
+        } 
+        console.log("=== Top children: "+$(col).find(".column__cell_top").children().length);
+        //  получить ПЕРВЫЙ и --- элемент каждой колонки
+        let topElmLevel = $(col).find(".column__cell_top").children(":first-child").data("name");
+        let topEmpty = getNextCardFor(topElmLevel);
+        if(topEmpty===undefined) topEmpty = "10"
+        waitingCards[i].push(topEmpty);
+
+        //  получить --- и ПОСЛЕДНИЦ элемент каждой колонки
+        let bottomElmLevel = $(col).find(".column__cell_bot").children(":last-child").data("name");
+        let bottomEmpty = getNextCardFor(bottomElmLevel);
+         if(bottomEmpty===undefined) bottomEmpty = "8";
+        waitingCards[i].push(bottomEmpty);
+        //  вычесть, какие карты должны быть следующими после этих карт
+
+    }
+    return waitingCards;
+}
+
+//  проверить наличие их у угрока
+function checkPlayersHandCards(playerHand){
+    return waitingCards.filter(function(obj) { return playerHand.indexOf(obj) >= 0; }); 
+}
+
+//  добавить найденным картам выезжание
+
+//  добавить отметки на стол к возможным укладкам карт
+
+function getNextCardFor(name){
+    console.log("SWITCH name: "+name);
+    switch(name){
+        case "6":
+            console.log("6 - NULL");
+            return null;
+        case "7":
+            return "6";
+        case "8":
+            return "7";
+        case "9":
+            return ["8", "10"];
+        case "10":
+            return "J";
+        case "J":
+            return "Q";
+        case "Q":
+            return "K";
+        case "K":
+            return "A";
+        case "A":
+            return null;
+    }
 }
