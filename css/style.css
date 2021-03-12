@@ -72,6 +72,14 @@ body {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.table .column__cell_mid .card_9 {
+  position: absolute;
+  margin: 0;
 }
 
 .table .column__cell_bot {
@@ -95,15 +103,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-}
-
-.table__card .card__label {
-  position: relative;
-}
-
-.table__card .card__label_bot {
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
+  margin: -44px 0;
 }
 
 .opponentHand {
@@ -167,6 +167,26 @@ body {
   margin-left: -40px;
 }
 
+.column__kind-symbol {
+  width: 70px;
+  height: 110px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.1);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 8px;
+  margin: 3px;
+}
+
 .card {
   z-index: 1;
   width: 80px;
@@ -177,6 +197,7 @@ body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 5px;
+  position: relative;
 }
 
 .card .rk {
@@ -185,6 +206,19 @@ body {
 
 .card .bk {
   color: black;
+}
+
+.card .card__label {
+  position: relative;
+}
+
+.card .card__label_bot {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.card_pretender {
+  top: -14px;
 }
 
 .opponent__card {
@@ -210,6 +244,16 @@ body {
   margin-right: -50px;
   -webkit-transition: margin .3s;
   transition: margin .3s;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .user__hand .user__card > * {
@@ -255,10 +299,11 @@ body {
 }
 
 .todo__items_done {
-  text-decoration: line-through;
-  color: #aaa;
-  padding: 0 12px !important;
-  font-size: 11px !important;
+  display: none;
+  /*text-decoration: line-through;
+            color: #aaa;
+            padding: 0 12px!important;
+            font-size: 11px!important;*/
 }
 
 .todo__items_done:hover {

@@ -27,9 +27,10 @@ function initGame(playersCount){
     waitingCards = [];
     stack = buildStack();
     playersTotal = playersCount;
-    shakeStack(stack);
+    stack = shakeStack(stack);
     playerHands = divideCards(playersTotal);
     currentPlayer = findFirstPlayer();
+
     buildCurrentPlayerHand();
 
     let oppHands = getActiveHands(playersTotal);
@@ -44,10 +45,20 @@ function buildStack(){
         for(let n=0; n<9; n++){
             // arr.push(cardNames[n]+cardKinds[k]);
             // arr.push(cardNamesIdx[n]+""+cardKindIdx[k]);
-            arr.push(cardKindIdx[k]+""+cardNamesIdx[n]);
+            //arr.push(cardKindIdx[k]+""+cardNamesIdx[n]);
+            let cardObj = {
+                code:k+""+n,
+                kindIdx: k,
+                levelIdx: n,
+                kind: kindElements[k], 
+                level: cardNames[n],
+                fullName: ""+kindElements[k]+cardNames[n],
+                faceUp: false
+            };
+            arr.push(cardObj);
         }
     }
-    console.log("CARDS STACK:"+arr);
+    console.log("CARDS STACK:",arr[0]);
     return arr;
 }
 
@@ -56,25 +67,33 @@ function shakeStack(arr){
 
     for(let i=0; arr.length; i++){
         let rand = parseInt( Math.random()*arr.length);
-        shaked.push( arr.splice(rand, 1) );
+        shaked.push( ...arr.splice(rand, 1) );
     }
-    arr.push(...shaked);
+    arr = shaked.slice(0);
+    console.log(arr,shaked);
+    return shaked;
 }
 
 function divideCards(playersNum){
+    console.log(">>> STACK "+stack);
     let handCards = [];
     let playerCardsNum = 36/playersNum;
     for(let i=0; i<playersNum; i++){
         handCards.push( stack.splice(0, playerCardsNum));
     }
+    console.log("DIVEDED::: "+handCards);
     return handCards;
 }
 
 function findFirstPlayer(){
+    console.log("findFirstPlayer");
+    console.log(currentPlayer, playerHands);
     for(let i=0; i<playerHands.length; i++){
-        let alCards = playerHands[i].join(",");
-        console.log("=== FIRST "+alCards);
-        if(alCards.indexOf("3"+3)>=0)
+        
+        let diamondsNineHere = playerHands[i].filter((elm)=>{
+            return elm.code=="33";
+        })
+        if(diamondsNineHere.length)
             return i;
     }
 }
@@ -82,40 +101,31 @@ function findFirstPlayer(){
 function buildCurrentPlayerHand(){
     console.log(currentPlayer, playerHands);
     let curPlayerHand = [ ... playerHands[currentPlayer]];
-
     curPlayerHand = sortHandCards(curPlayerHand);
 
-    let userHand = $(".user__hand");
-    
+    let userHand = $(".user__hand")[0];
+    console.log(curPlayerHand);
     for(let i=0; i<curPlayerHand.length; i++){
-        let cardStr = curPlayerHand[i].join("");
+        let card = curPlayerHand[i];
         
-        let card = $('<div class="card user__card">');
-        let cardName = cardNames[ cardStr.substr(1,1) ];
-        // let kindIndex = cardStr.length==2 ? cardStr.substr(1,1) : cardStr.substr(2,1);
-        let kindIndex = cardStr.substr(0,1);
-
-        card.append(
-            '<div class="card__label">'+cardName+
-            '<div class="rk">'+kindElements[kindIndex]+'</div></div>'
+        let cardElm = $('<div class="card user__card">');
+        let cardName = card.level;//cardNames[ cardStr.substr(1,1) ];
+        
+        cardElm.append(
+            '<div class="card__label">'+card.level+card.kind+'</div>'
         );
-        card.append(
-            '<div class="card__label card__label_bot">'+
-            cardName+'<div class="rk">'+kindElements[kindIndex]+
-            '</div></div>'
-        );
+        cardElm.append('<div class="card__label card__label_bot">'+cardName+card.kind+'</div>');
 
-        card.data("kind", kindIndex);
-        card.data("name", cardName);
-        console.log("Kind index: "+kindIndex);
-        card.click( cardClick );
+        cardElm.data("kind", card.kindIdx);
+        cardElm.data("name", card.level);
+        cardElm.click( cardClick );
         //card
-        userHand.append(card);
+        userHand.append(cardElm.get(0));
     }
 }
 
 function buildOpponentHands(hand, index){
-    console.log("player hands: "+playerHands.join("\n"));
+    //console.log("player hands: "+playerHands.join("\n"));
 
     `  для каждой руки оппонента нужно сделать свою функцию
        и в ней запускать оппонентскую строилку руки
@@ -124,7 +134,8 @@ function buildOpponentHands(hand, index){
        нет, в атрибуте указывать руку, в которую класть карты`
 
     let curPlayerHand = [ ... playerHands[index]];
-    let userHand = $(".user__hand");
+    // let userHand = $(".user__ha nd");
+    //console.log("Start building all opponent hands",curPlayerHand);
     for(let i=0; i<curPlayerHand.length; i++){
         let card = $('<div class="card opponent__card">');
         $("#"+hand).append(card);
@@ -155,7 +166,7 @@ function cardClick(e){
     $(e.target).removeClass("user__card");
     $(e.target).addClass("table__card");
     
-    let pendDir = "append";;
+    let apppendDir = "append";;
     let columnSide;
     if(numSide){
         columnSide = ".column__cell_bot";
@@ -164,19 +175,20 @@ function cardClick(e){
         columnSide = ".column__cell_mid";
     }else{
         columnSide = ".column__cell_top";
-        pendDir = "prepend";
+        apppendDir = "prepend";
     }
-    $(tableColumns[cardKind]).find(columnSide).get(0)[pendDir](e.target);
+    console.log("columnSide", columnSide);
+    $(tableColumns[cardKind]).find(columnSide).get(0)[apppendDir](e.target);
 
     waitingCards = getNextMoveCards();
-    //console.log("WAITING CARDS: ",waitingCards);
+    console.log("WAITING CARDS: ",waitingCards);
     let putNow = checkPlayersHandCards( playerHands[currentPlayer] );   //  put players card array as attr
-    //console.log(currentPlayer + "OWN CARDS: ", putNow);
+    console.log(currentPlayer + "OWN CARDS: ", putNow);
     console.log("waiting:",waitingCards,"current:", playerHands[currentPlayer]);
 }
 
 function sortHandCards(arr){
-    arr.sort( (a, b) => a - b)
+    arr.sort( (a, b) => a.code - b.code)
     return arr;
 }
 
@@ -188,7 +200,7 @@ function getNextMoveCards(){
     for( let i=0; i<4; i++){
         waitingCards.push([]);
         let col = columns.get(i);
-        // console.log("::: "+$(col).find(".column__cell_mid").children().length);
+        
         if($(col).find(".column__cell_mid").children().length==1){
             waitingCards[i].push("9");
             //console.log(">>>");
