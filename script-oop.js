@@ -106,6 +106,7 @@ function Card(kindOrCode, level){
 }
 
 function PlayerHand(playerNum, playerCards, handId, playerHuman, cardClicked){
+    this.playerNum = playerNum;
     this.cards = playerCards;
     this.elementID = handId;
 
@@ -133,34 +134,66 @@ function KindColumn(element, kind){
         mid:[],
         bot:[]
     };
+    this.topPlus = null;
+    this.midPlus = null;
+    this.botPlus = null;
 
-    this.markProperCards = (cards)=>{
-        const filterdCards = cards.filter( elm => {
+
+    this.markProperCards = (userCards)=>{
+        const filterdCards = userCards.filter( elm => {
             return +elm.kindIdx == +this.kindIdx;
             });
+        console.log(filterdCards);
         this.showSuitableCards(filterdCards);
     }
 
     this.showSuitableCards = (cardsInHand)=>{
-        console.log(this.kindIcon+" [][][]",cardsInHand);
         const cardsToPoceed = this.getNextCards();
+        console.log("~~~ Cards to hilite:",cardsToPoceed);
+        for(let point of cardsToPoceed){
+            console.log(typeof point,point);
+            let plus = this.createPlus(point);
+            this.topPlus
+        }
     }
+
+    this.createPlus = (point)=>{
+        let plusElement = document.createElement("div");
+        plusElement.className = "column__plus";
+        plusElement.innerText = "+";
+        console.log(point.className, this.topPart.className);
+        let whereToPut = point.part==this.topPart  ? "afterbegin" : "beforeend";
+        console.log("how to insert: "+point);
+        point.part.appendChild(plusElement);
+        //return plusElement;
+    }
+    this.clearAllPluses = ()=>{
+
+    }
+    
     this.getNextCards = ()=>{
         const emptySpaces = [];
         if( !(this.midPart.children.length-1) ){
-                return ["column__cell_mid", 3];
+            return [{part:this.botPart, level:this.kindIdx+""+3}];
         }
+        console.log(">>> ",this.midPart.children.length);
 
-        emptySpaces.push( "column__cell_top", this.topPart.children.length + 4);
-        emptySpaces.push( "column__cell_bot", 2 - this.topPart.children.length);
+        let topWaiting = this.topPart.children.length+4;
+        if(topWaiting<9)
+            emptySpaces.push( {
+                part: this.topPart, 
+                level: this.kindIdx+""+topWaiting
+            });
+
+        let botWaiting = 2-this.botPart.children.length;
+        if(botWaiting>=0)
+            emptySpaces.push( {
+                part: this.botPart, 
+                level: this.kindIdx+""+botWaiting
+            });
         return emptySpaces;
     }
-    this.checkColumnEmptiness = (part)=>{
-        let className = part.className;
-        className = className.substr(className.indexOf(" ")+1);
-        className = className.substr(className);
-        console.log(">>> check >>>",className);
-    }
+    
 
     this.putCard = (card)=>{
         const part = this.getColumnSideByLevel(card.levelIdx);
@@ -211,9 +244,8 @@ function Game(settings){
         this.createHands(this.dividedCards);
         
         this.columns = document.getElementsByClassName("kind__column");
-
-
     }
+
 
     this.cardClicked = (card)=>{
         const cardCode = card.code;
@@ -223,6 +255,8 @@ function Game(settings){
         this.dividedCards[this.currentPlayerNum].splice(idx,1);
         
         this.columnObjs[card.kindIdx].putCard(card);
+
+        this.showAllowedCards();
     }
 
     this.createHands = (handsCardArray)=>{
@@ -256,12 +290,12 @@ function Game(settings){
     }
     this.startNewGame = ()=>{
         this.init();
-        this.showAllowedCards();
+        // this.showAllowedCards();
     }
     this.showAllowedCards = ()=>{
-        console.log(this.currentPlayerNum+" init columns",this.hands);
+        // console.log(this.currentPlayerNum+" init columns",this.hands);
         const currentPlayer = this.hands[this.currentPlayerNum];
-        console.log(currentPlayer);
+        // console.log(currentPlayer);
         for(let column of this.columnObjs){    //  список HTML элементов, а не массив объектов
             column.markProperCards(currentPlayer.cards);
         }
@@ -270,12 +304,12 @@ function Game(settings){
     this.gameStepInit = ()=>{
 
     }
-};
+}
 
 
 
 var gameSettings = {
-    playersCount: 2,
+    playersCount: 2
 }
 var game = new Game(gameSettings);
 game.startNewGame();

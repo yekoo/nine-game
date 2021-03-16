@@ -91,6 +91,13 @@ body {
           justify-content: flex-start;
 }
 
+.column__plus{
+  background: rgba(0,255,0,.5);
+  color: white;
+  font-size: 48px;
+  border-radius:20px;
+}
+
 .table__card {
   margin: -30px 0;
   -webkit-box-pack: justify;

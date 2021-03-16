@@ -66,9 +66,10 @@ body{
         flex-direction: column;
         display: flex;
         margin: -44px 0;
-        
-
-        
+    }
+    &__plus{
+        background: rgba(0,255,0,.5);
+        color: white;
     }
 }
 .opponentHand{

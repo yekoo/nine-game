@@ -43,9 +43,7 @@ function buildStack(){
     let arr = [];
     for(let k=0; k<4; k++){
         for(let n=0; n<9; n++){
-            // arr.push(cardNames[n]+cardKinds[k]);
-            // arr.push(cardNamesIdx[n]+""+cardKindIdx[k]);
-            //arr.push(cardKindIdx[k]+""+cardNamesIdx[n]);
+ 
             let cardObj = {
                 code:k+""+n,
                 kindIdx: k,
