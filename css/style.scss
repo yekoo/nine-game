@@ -28,7 +28,6 @@ body{
     align-items: center;
 
     .kind__column{
-        border: 1px solid red;
         display: flex;
         align-items: center;
         height: 100%;
@@ -75,7 +74,6 @@ body{
 .opponentHand{
     display: flex;
     position: absolute;
-
 }
 
 .hand__top{
@@ -136,6 +134,13 @@ body{
     box-sizing: border-box;
     padding: 5px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .faceUp{
+        display: block;
+    }
 
     .rk{
         color: red;
@@ -156,6 +161,9 @@ body{
 }
 .opponent__card{
     background: pink;
+    .faceUp{
+        display: none;
+    }
 }
 
 .user__hand{
@@ -171,9 +179,9 @@ body{
     .user__card{
         margin-right: -50px;
         transition: margin .3s;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
 
         >*{
             pointer-events: none;

@@ -198,6 +198,20 @@ body {
           box-sizing: border-box;
   padding: 5px;
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.card .faceUp {
+  display: block;
 }
 
 .card .rk {
@@ -225,6 +239,10 @@ body {
   background: pink;
 }
 
+.opponent__card .faceUp {
+  display: none;
+}
+
 .user__hand {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -244,16 +262,6 @@ body {
   margin-right: -50px;
   -webkit-transition: margin .3s;
   transition: margin .3s;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
 }
 
 .user__hand .user__card > * {
@@ -308,6 +316,20 @@ body {
 
 .todo__items_done:hover {
   background: #ccc !important;
+}
+
+.todo__items_greatTask {
+  color: maroon;
+  background: yellow;
+}
+
+.todo__items_greatTask li {
+  font-size: 75%;
+  color: red;
+}
+
+.todo__items_greatTask li s {
+  color: grey;
 }
 
 .todo[open] {

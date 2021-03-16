@@ -31,6 +31,17 @@
         &_done:hover{
             background: #ccc!important;
         }
+        &_greatTask{
+            color: maroon;
+            background: yellow;
+            li{
+                font-size: 75%;
+                color: red;
+                s{
+                    color:grey;
+                }
+            }
+        }
     }
 }
 .todo[open]{
