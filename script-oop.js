@@ -1,4 +1,7 @@
 'use strict';
+
+// const { threadId } = require("worker_threads");
+
 console.log('dobro');
 
 var cardKinds = ["♣","♥","♠","♦"];
@@ -119,6 +122,17 @@ function PlayerHand(playerNum, playerCards, handId, playerHuman, cardClicked){
         card.init({user:playerHuman});
         handElem.appendChild(card.element);
     }
+
+    this.hiliteCards = (properCards)=>{
+        console.log("find proper cards",properCards,"in hand",this.cards);
+        var result = properCards.filter( (o1)=> {
+            return this.cards.some( (o2)=> {
+                return o1.level == o2.code;
+           });
+        });
+        console.log( ">>>>>> "+result);
+    }
+
     return this;
 }
 
@@ -137,24 +151,31 @@ function KindColumn(element, kind){
     this.topPlus = null;
     this.midPlus = null;
     this.botPlus = null;
+    this.pluses = [];
 
 
-    this.markProperCards = (userCards)=>{
+    this.getProperCards = (userCards)=>{
         const filterdCards = userCards.filter( elm => {
             return +elm.kindIdx == +this.kindIdx;
             });
-        console.log(filterdCards);
-        this.showSuitableCards(filterdCards);
+        // console.log(filterdCards);
+        // return this.checkSuitableCards(filterdCards);
+        return this.getNextCards();
     }
 
-    this.showSuitableCards = (cardsInHand)=>{
+    /*this.checkSuitableCards = (cardsInHand)=>{
         const cardsToPoceed = this.getNextCards();
-        console.log("~~~ Cards to hilite:",cardsToPoceed);
-        for(let point of cardsToPoceed){
-            console.log(typeof point,point);
-            let plus = this.createPlus(point);
-            this.topPlus
-        }
+        //console.log("~~~ Cards to hilite:",cardsToPoceed);
+        return cardsToPoceed;
+        //console.log( `если у игрока есть соответствующие карты!`,cardsToPoceed);
+
+        //for(let point of cardsToPoceed){
+        //    console.log(typeof point,point);
+        //    let plus = this.createPlus(point);
+        //}
+    }*/
+    this.hiliteHandCards = (cards)=>{
+        console.log("Cards to hilite:",cards);
     }
 
     this.createPlus = (point)=>{
@@ -165,10 +186,21 @@ function KindColumn(element, kind){
         let whereToPut = point.part==this.topPart  ? "afterbegin" : "beforeend";
         console.log("how to insert: "+point);
         point.part.appendChild(plusElement);
+
+        plusElement.addEventListener("click", this.plusClicked);
+        this.pluses.push(plusElement);
         //return plusElement;
     }
     this.clearAllPluses = ()=>{
-
+        console.log("PLUS CLICKED!");
+        for(let plus of this.pluses){
+            plus.removeEventListener("click", this.plusClicked);
+            plus.parentNode.removeChild(plus);
+        }
+        this.pluses = [];
+    }
+    this.plusClicked = (e)=>{
+        this.clearAllPluses();
     }
     
     this.getNextCards = ()=>{
@@ -196,21 +228,21 @@ function KindColumn(element, kind){
     
 
     this.putCard = (card)=>{
-        const part = this.getColumnSideByLevel(card.levelIdx);
+        // const part = this.getColumnSideByLevel(card.levelIdx);
         if(card.levelIdx==3){
             card.element.className = "card table__card card_9";
-            this.midPart.appendChild(card.element);
+            this.midPart.append(card.element);
         }else if(card.levelIdx>3){
             card.element.className = "card table__card";
-            this.topPart.appendChild(card.element);
+            this.topPart.prepend(card.element);
         }else{
             card.element.className = "card table__card";
-            this.botPart.appendChild(card.element);
+            this.botPart.append(card.element);
         }
         console.log();
     }
 
-    this.getColumnSideByLevel = (num)=>{
+    /*this.getColumnSideByLevel = (num)=>{
         if(num==3){
             return "column__cell_mid";
         }else if(num<3){
@@ -218,6 +250,28 @@ function KindColumn(element, kind){
         }else{
             return "column__cell_top";
         }
+    }*/
+}
+
+function PhaseLabel(){
+    this.HUMAN = "player human";
+    this.CPU = "player computer";
+    this.currentPlayer;
+    this.currentNumber = 0;
+    this.element;
+    this.playersRow;
+
+    this.setPhase = (num=0)=>{
+        this.currentNumber;
+        this.element.innerText = num;
+    }
+
+    this.init = ()=>{
+        this.element = document.getElementById('playerLabel');
+        this.setPhase();
+    }
+    this.buildPlayersRow = (num)=>{
+
     }
 }
 
@@ -231,19 +285,22 @@ function Game(settings){
     this.columns = null;
     this.columnObjs = null;
     this.currentPlayerNum = null;
+    this.humanIndex;
     
     this.init = ()=>{
-        this.currentPlayerNum = this.playersNum-1;
+        // this.currentPlayerNum = this.playersNum-1;
         this.cardStack = new CardStack();
         this.cardStack.buildStack();
         this.cardStack.shuffle();
-
+        
         this.dividedCards = this.cardStack.divide(this.playersNum);
-
+        
         this.initColumns();
         this.createHands(this.dividedCards);
-        
         this.columns = document.getElementsByClassName("kind__column");
+        this.humanIndex = this.settings.playersCount-1;
+        this.currentPlayerNum = this.findFirstPlayer(); //Math.floor(Math.random()*this.playersNum);
+
     }
 
 
@@ -269,6 +326,21 @@ function Game(settings){
             this.hands.push(handObject);
         }
     }
+
+    this.findFirstPlayer = ()=>{
+        // console.log("hands to look for 9",this.hands);
+        for(let i=0; i<this.hands.length; i++){
+            let found9=this.hands[i].cards.some( (elm)=>{
+                return elm.code=="33";
+            });
+
+            if(found9){
+                console.log("Hand index with 9 is "+i);
+                return i;
+            }
+        }
+    }
+
     this.initColumns = ()=>{
         this.columnObjs = [];
         let allColumnElements = document.getElementsByClassName("kind__column");
@@ -290,15 +362,40 @@ function Game(settings){
     }
     this.startNewGame = ()=>{
         this.init();
-        // this.showAllowedCards();
+        // this.getCurrrentPlayer();
+        //this.showAllowedCards();
+
+        this.nextTurn();
     }
-    this.showAllowedCards = ()=>{
-        // console.log(this.currentPlayerNum+" init columns",this.hands);
-        const currentPlayer = this.hands[this.currentPlayerNum];
-        // console.log(currentPlayer);
-        for(let column of this.columnObjs){    //  список HTML элементов, а не массив объектов
-            column.markProperCards(currentPlayer.cards);
+    this.nextTurn = ()=>{
+        let cardsToGo =this.showAllowedCards();
+        if(this.currentPlayerNum != this.humanIndex){
+            this.computerThink(cardsToGo);
+        }else{
+            this.humanThink(cardsToGo);
         }
+    }
+
+    this.computerThink = (properArr)=>{
+        console.log("COMPUTER TURN");
+    }
+    this.humanThink = (properArr)=>{
+        console.log("HUMAN TURN");
+        // this.hands[this.humanIndex];
+        // this.hiliteHandCards(properArr);
+        this.hands[this.humanIndex].hiliteCards(properArr);
+    }
+    this.changePlayer = ()=>{
+
+    }
+
+    this.showAllowedCards = ()=>{
+        const currentPlayer = this.hands[this.currentPlayerNum];
+        const properCards = [];
+        for(let column of this.columnObjs){    //  список HTML элементов, а не массив объектов
+            properCards.push(...column.getProperCards(currentPlayer.cards));
+        }
+        return properCards;
     }
 
     this.gameStepInit = ()=>{
@@ -308,8 +405,11 @@ function Game(settings){
 
 
 
+var phaseLabel = new PhaseLabel();
+
 var gameSettings = {
-    playersCount: 2
+    playersCount: 2,
+    phaseLabel,
 }
 var game = new Game(gameSettings);
 game.startNewGame();

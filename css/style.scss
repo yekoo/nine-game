@@ -14,7 +14,6 @@ body{
 }
 
 
-
 .table{
     position: absolute;
     background: #2b1;
@@ -34,6 +33,7 @@ body{
         flex-direction: column;
         justify-content: center;
     }
+
     .column__cell{
         display: flex;
         flex-direction: column;
@@ -67,10 +67,20 @@ body{
         display: flex;
         margin: -44px 0;
     }
-    &__plus{
+
+    /*.column__cell_bot{
         background: rgba(0,255,0,.5);
         color: white;
-    }
+    }*/
+    .column__plus{
+        background: rgba(0,255,0,.5);
+        color: white;
+        font-size: 48px;
+        border-radius:20px;
+        padding:4px 12px;
+        // margin:-20px auto;
+        cursor: pointer;
+      }
 }
 .opponentHand{
     display: flex;
@@ -180,9 +190,6 @@ body{
     .user__card{
         margin-right: -50px;
         transition: margin .3s;
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: space-between;
 
         >*{
             pointer-events: none;
@@ -194,6 +201,19 @@ body{
     .user__card:hover{
         margin-top: -24px;
     }
+}
+
+.playerLabel{
+    position: absolute;
+    width:48px;
+    height:48px;
+    background: orange;
+    box-sizing: border-box;
+    border-radius: 24px;
+    color: white;
+    bottom: 4px;
+    right: 4px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .1);
 }
 
 @import 'todo';
