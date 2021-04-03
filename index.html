@@ -9,38 +9,15 @@
 			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
               crossorigin="anonymous"></script>
     <!-- <script src="./script.js" defer></script> -->
-    <script src="./script-oop.js" defer></script>
+    <!-- <script src="./script-oop.js" defer></script> -->
+    <script src="./structured.js" defer></script>
+
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <details class="todo">
         <summary class="todo__summ">TODO</summary>
         <ul class="todo__items">
-            <li class="todo__items_done">сделать хранение мастей как буквы, а не как символы</li>
-            <li style="font-style: italic;">все действия и анимации разместить в функциях</li>
-            <li style="font-style: italic;">пока разработка, хозяин девятки и есть играющий</li>
-            <li class="todo__items_done">Построить карты текущего игрока на картах снизу</li>
-            <li class="todo__items_done">Построить карты остальных игроков рубашками вверх</li>
-            <li class="todo__items_done">Найти игрока ходящего первым</li>
-            <li class="todo__items_done">Вставлять масти аппендом из массива (и символ и класс цвета)</li>
-            <li class="todo__items_done">Сделать раздачу на 2 и 3 игрока</li>
-            <li class="todo__items_done">Пересмотреть расположение карт на столе:</li>
-            <li class="todo__items_done"> = 3 ячейки в каждой масти, у нижней сделать перевернутое выравнивание контента, тобы свежие отображались выше без z-index</li>
-            <li class="todo__items_done">добавить на карты перевернутое имя/масть</li>
-            <li class="todo__items_done">Написать функцию добавления карт на стол (сверху и снизу)</li>
-            <li class="todo__items_done">Написать функцию определения колонки для добавляемой карты</li>
-            <li class="todo__items_done">Переписать именования карт - заменить буквенные имена карт на цифровые</li>
-            <li class="todo__items_done">Менять классы картам переносимым из руки на стол</li>
-            <li class="todo__items_done">Сделать учет колонок выше/ниже и стороны, с которых их добавлять append/prepend</li>
-            <li class="todo__items_done">Добавить картам, что в руке, перевернутые обозначения снизу</li>
-            <li class="todo__items_done">Сделать сортировку карт в руке. чтобы упростить код сделаю в кодах карт сначала МАСТЬ а потом УРОВЕНЬ</li>
-            <li class="todo__items_done">Сделать определение доступных для хода карт</li>
-            <li class="todo__items_done">Устроить хранение состояния/карт и проч в виде моделей (у объекта каждой карты будут ссылки на их DIVы)</li>
-            <li class="todo__items_done">Переделать хранеие всех указаний карт с просто строки на объект</li>
-            <li class="todo__items_done">Видимо, придется добавить в аттр карт DATA еще и полное имя Ko</li>
-            <li>Сделать выезжание карт в руке, что можно положить</li>
-            <li>придумать, как отображать доступные места на столе для заполнения</li>
-            <li class="todo__items_done">поместить в каждую колонку масть ожидаемых карт, пока нет  9-ки</li>
             <li><details class="todo__items_greatTask">
                 <summary>Пересобрать имеемое в объекную конструкцию, чтоб данные брались не от HTML-элементов, а из МОДЕЛИ и работалось все также в МОДЕЛИ</summary>
                 <ol>
@@ -51,7 +28,7 @@
                     <li><s>Создать объект KindColumn</s></li>
                     <li><s>Сделать кликуемость карт в руке</s></li>
                     <li><s>Сделать перенесениt карт из руки на стол</s></li>
-                    <li>Устроить внутри Column функционал отображения доступных для хода карт</li>
+                    <li><s>Устроить внутри Column функционал отображения доступных для хода карт</s></li>
                     <li>сделать showSuitableCards для отображения свободных мест</li>
                     <li>Сделать функцию удаления/добавления только внутри одной колонки</li>
                 </ol>
@@ -75,26 +52,32 @@
                     <li>для начала, используя ФункциюПоискаДоступныхКарт - рандомно класть карты</li>
                     
                 </ol>
+
+                
             </details>
+            <!--<li><details class="todo__items_greatTask">
+                <summary>Structure</summary>
+                123
+            </details></li>-->
             </li>
         </ul>
     </details>
 
     <div class="center">
 
-        <div class="table">
-            <div class="kind__column">
+        <div class="table" id="table">
+            <div class="suit_column">
                 <div class="column__cell column__cell_top"></div>
                 <div class="column__cell column__cell_mid">
                     <div class="column__kind-symbol">
-                        <img src="img/pike.png" alt="pike">
+                        <img src="img/clove.png" alt="clove">
                     </div>
                 </div>
                 <div class="column__cell column__cell_bot"></div>
             </div>
 
             
-            <div class="kind__column">
+            <div class="suit_column">
                 <div class="column__cell column__cell_top">
                 </div>
                 <div class="column__cell column__cell_mid">
@@ -105,17 +88,17 @@
                 <div class="column__cell column__cell_bot">
                 </div>
             </div>
-            <div class="kind__column">
+            <div class="suit_column">
                 <div class="column__cell column__cell_top"></div>
                 <div class="column__cell column__cell_mid">
                     <div class="column__kind-symbol">
-                        <img src="img/clove.png" alt="clove">
+                        <img src="img/pike.png" alt="pike">
                     </div>
                 </div>
                 <div class="column__cell column__cell_bot"></div>
             </div>
 
-            <div class="kind__column">
+            <div class="suit_column">
                 <div class="column__cell column__cell_top">
                 </div>
 
