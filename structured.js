@@ -14,6 +14,10 @@ function Card(suit, suitChar, rank, rankChar){
     this.getElement = ()=>{
         return this.domElement;
     };
+    this.setFaceUp = (how)=>{
+        const faceStateClassName = how ? "user__card" : "opponent__card";
+        this.domElement.classList.add(faceStateClassName);
+    };
     this.buildCardElement = (user = false)=>{
         this.domElement = document.createElement("div");
         this.domElement.dataset.code = this.code;
@@ -39,14 +43,20 @@ function Card(suit, suitChar, rank, rankChar){
     }
 };
 
-function Hand(handId){
+function Hand(handId, userHand){
     this.domElement = document.getElementById(handId);
     this.getElement = ()=>{ return this.domElement};
     this.cards = null;// []
 
     this.setOnClick = (handler)=>{
+        console.log("Hand click handler setting");
         for(let c=0; c<this.cards.length; c++){
             this.cards[c].setOnClick(handler);
+        }
+    };
+    this.setCardsFaceUp = (how)=>{
+        for(let c=0; c<this.cards.length; c++){
+            this.cards[c].setFaceUp(how);
         }
     };
     this.hiliteProperCards = ()=>{};
@@ -77,6 +87,7 @@ function Hand(handId){
         }, 1300);
     }
     this.isHandEmpty = ()=>{
+        console.log(this.cards.length);
         return this.cards.length==0;
     }
 }
@@ -152,10 +163,12 @@ let game = {
         // this.hands[playersNum-1].setOnClick();
         this.hands.setUserCardOnClick((e)=>{this.playerCardClick(e);});
         
+        this.table.setPlayersCount(this.playersNum);
         this.table.buildColumns( this.dataStack.getSuits() );
         this.playerLabel.init(playersNum, "playerLabel");
     },
     playerCardClick(e){
+        this.table.changePlayer(this.currentPlayer);
         this.table.insertCard(e.target);
         this.nextPlayerTurn();
     },
@@ -218,24 +231,28 @@ let game = {
         //  взять колоду карт и найти там соответствующие КОДУ карты
         let cardObjs = [];
 
-        console.log(this.hands.getHandObjs()[this.currentPlayer].cards);
+        // console.log(this.hands.getHandObjs()[this.currentPlayer].cards);
         for(let obj of waitingObjs){
             let card = this.hands.getHandObjs()[this.currentPlayer].cards.find(crd => crd.code==obj.code)
             if(card)
                 cardObjs.push(card);
         }
-        console.log(cardObjs);
+        // console.log(cardObjs);
         return cardObjs;
     },
     nextPlayerTurn(){
-        this.checkCardsOver(this.currentPlayer);
+        if( this.checkCardsOver(this.currentPlayer) ){
+            alert("FINISHED by "+this.currentPlayer+" player ((x")
+            return;
+        }
         let cruNum = this.currentPlayer + 1;
         cruNum = cruNum>=this.playersNum ? 0 : cruNum;
         this.currentPlayer = cruNum;
+        this.table.changePlayer(this.currentPlayer);
         this.playerTurn();
     },
     findFirstPlayer(){
-        console.log(">>>", this.hands.getHandObjs());
+        // console.log(">>>", this.hands.getHandObjs());
         const allHands = this.hands.getHandObjs();
         for(let i=0; i<allHands.length; i++){
             let found9=allHands[i].cards.some( (elm)=>{
@@ -243,14 +260,15 @@ let game = {
             });
 
             if(found9){
-                console.log("Hand index with 9 is "+i);
                 return i;
             }
         }
     },
     checkCardsOver(playerNum){
-        console.log('Check is all player cards is over? ');
-        return false;
+        console.log(this.hands.getHandObjs()[this.currentPlayer]);
+        const isOver = this.hands.getHandObjs()[this.currentPlayer].isHandEmpty()
+        console.log('Check is all player cards is over? '+isOver);
+        return isOver;
     },
 
     playerLabel:{
@@ -321,10 +339,27 @@ let game = {
         tableElement:null,
         columns:null,
         getCard:null,
+        playersCount:null,
+        animationClassesReserve:[null, null,
+            "putCardFromLeft",
+            "putCardFromTop",
+            "putCardFromRight",
+            "putCardFromUser",
+        ],
+        animationClasses:[null, null,
+            ["putCardFromTop","putCardFromUser"],
+            ["putCardFromLeft","putCardFromRight","putCardFromUser"],
+            ["putCardFromLeft","putCardFromTop","putCardFromRight","putCardFromUser"],
+        ],
+        currentPlayer:0,
 
         // putCard(card){},
 
         columns:[],
+
+        setPlayersCount(num){
+            this.playersCount = num;
+        },
 
         buildColumns(suits){
             this.columns=[];
@@ -354,14 +389,20 @@ let game = {
             }
             return suitedCards;
         },
+        changePlayer(num){
+            this.currentPlayer = num;
+        },
         insertCard(cardElem){
-            console.log(cardElem);
+            // console.log(cardElem);
             let cardCode = cardElem.dataset.code;
             let cardSuit = +cardCode[0];
             let cardRank = +cardCode[1];
-            console.log(this+" -> Clicked card props: "+cardSuit+" "+cardRank);
+            // console.log(this+" -> Clicked card props: "+cardSuit+" "+cardRank);
             this.columns[cardSuit].putCard(cardElem, cardRank);
-
+            // cardElem.classList.add( animationClasses[this.currentPlayer] );
+            const animationClass = this.animationClasses[this.playersCount][this.currentPlayer] 
+            console.log(this.playersCount+" - "+this.currentPlayer+"%%%%%%%%%%%%%%%%% "+animationClass);
+            cardElem.classList.add(animationClass);
         },
 
         
@@ -397,13 +438,13 @@ let game = {
             for(let h=0; h<this.handsElements.length; h++){
                 const hand = new Hand(this.handsElements[h]);
                 hand.fillCards(handsCards[h]);
-                // this[h] = hand;
                 this.handObjs.push(hand);
+                if(h<this.handsElements.length-1)
+                    hand.setCardsFaceUp(false);
             }
             this.userHand = this.handObjs[this.handObjs.length-1];
         },
         setUserCardOnClick(handler){
-            console.log("setUserCardOnClick",handler);
             this.handObjs[this.handObjs.length-1].setOnClick(handler);
         },
         
@@ -416,16 +457,20 @@ let game = {
                 case 4:
                     return ["opp__hand_left", "opp__hand_top", "opp__hand_right", "user__hand"];
             }
-            /*
-                case 2:
-                    return ["opp__hand_top","user__hand"];
-                case 3:
-                    return ["opp__hand_right", "opp__hand_left","user__hand"];
-                case 4:
-                    return ["opp__hand_top", "opp__hand_right", "opp__hand_left","user__hand"];
-            */
         },
     }
 }
-game.initGame(4);
-game.startGame();
+
+function showMenu(){
+    
+}
+function hideMenu(){
+    const menuElem = document.getElementById("menu");
+    menuElem.style = "display:none;";
+}
+function startGame(playersNum){
+    // alert("START");
+    hideMenu();
+    game.initGame(playersNum);
+    game.startGame();
+}
