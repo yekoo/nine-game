@@ -445,6 +445,17 @@ body {
   }
 }
 
+@media screen and (max-width: 540px) {
+  body {
+    padding: 0;
+    margin: 0;
+  }
+  .center {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 .todo {
   position: absolute;
   width: 300px;

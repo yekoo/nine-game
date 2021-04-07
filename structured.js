@@ -72,22 +72,35 @@ function Hand(handId, userHand){
                 return (o1.code == o2.code);
             });
         });
-        //console.log(result," is result and PROPER CARDS",this.cards, cards);
         return result;
         
     }
     this.computerChoose = (tableWaitings, gameInsertHandler, nextTurnHandler)=>{
-        
-        // console.log("CPU",tableWaitings, this.cards);
-        let chosenCard = tableWaitings[0];
+        let chosenCard = this.easyCpuChoose(tableWaitings);
         // console.log("{{{",tableWaitings[0]);
+        this.findAndRemoveCard(chosenCard);
         setTimeout(() => {
             gameInsertHandler(chosenCard.domElement);
             nextTurnHandler();
         }, 1300);
     }
+    this.findAndRemoveCard = (card)=>{
+        const index = this.cards.findIndex((element, index) => {
+            if (card.code === element.code) {
+                return true
+            }
+        });
+        // console.log("Card in array found!"+index);
+        this.cards.splice(index, 1);
+    }
+    this.easyCpuChoose = (waitingCards)=>{
+        const randIdx = Math.floor( Math.random() * (waitingCards.length-1));
+        return waitingCards[randIdx];
+    }
+    this.masterCpuChoose = ()=>{
+
+    }
     this.isHandEmpty = ()=>{
-        console.log(this.cards.length);
         return this.cards.length==0;
     }
 }
@@ -168,8 +181,13 @@ let game = {
         this.playerLabel.init(playersNum, "playerLabel");
     },
     playerCardClick(e){
+        const clickedCardCode = e.target.getAttribute("data-code");
+        this.hands.getHandObject(this.currentPlayer).findAndRemoveCard({code:clickedCardCode})
         this.table.changePlayer(this.currentPlayer);
         this.table.insertCard(e.target);
+
+        const userHandEmpty = this.hands.getHandObject( this.currentPlayer).isHandEmpty();
+        console.log(userHandEmpty);
         this.nextPlayerTurn();
     },
     startGame(){
@@ -189,7 +207,10 @@ let game = {
         let currentHand = this.hands.getHand(this.currentPlayer)
         let hasProperCards = currentHand.hasOneOfCards(waitingCards);
 
-        if(gatheredCards.length==0 && !currentHand.isHandEmpty()){
+        //alert("~ ~ ~ ~ > HIs hand empty? "+currentHand.cards.length);
+        if(currentHand.isHandEmpty()){
+            alert("~~~~~~~~~~> Hand empty. The winner is "+this.currentPlayer);
+        }else if(gatheredCards.length==0){
             this.playerPass();
             return;
         }
@@ -205,10 +226,11 @@ let game = {
             console.log("BLOCK HAND MOUSE");
             this.hands.allowUserHand(false);
             //      КОМП:    выбрать карту для хода
-            this.hands.getHandObjs()[this.currentPlayer].computerChoose(
+            this.hands.getHandObject(this.currentPlayer).computerChoose(
                 gatheredCards,
                 (card)=>{this.table.insertCard(card)},
-                ()=>this.nextPlayerTurn());
+                ()=>this.nextPlayerTurn()
+            );
         }
         
         this.changePlayerLabel(this.currentPlayer);
@@ -233,7 +255,7 @@ let game = {
 
         // console.log(this.hands.getHandObjs()[this.currentPlayer].cards);
         for(let obj of waitingObjs){
-            let card = this.hands.getHandObjs()[this.currentPlayer].cards.find(crd => crd.code==obj.code)
+            let card = this.hands.getHandObject(this.currentPlayer).cards.find(crd => crd.code==obj.code)
             if(card)
                 cardObjs.push(card);
         }
@@ -252,7 +274,6 @@ let game = {
         this.playerTurn();
     },
     findFirstPlayer(){
-        // console.log(">>>", this.hands.getHandObjs());
         const allHands = this.hands.getHandObjs();
         for(let i=0; i<allHands.length; i++){
             let found9=allHands[i].cards.some( (elm)=>{
@@ -265,8 +286,8 @@ let game = {
         }
     },
     checkCardsOver(playerNum){
-        console.log(this.hands.getHandObjs()[this.currentPlayer]);
-        const isOver = this.hands.getHandObjs()[this.currentPlayer].isHandEmpty()
+        console.log(this.hands.getHandObject(this.currentPlayer));
+        const isOver = this.hands.getHandObject(this.currentPlayer).isHandEmpty()
         console.log('Check is all player cards is over? '+isOver);
         return isOver;
     },
@@ -420,6 +441,9 @@ let game = {
         },
         getHandObjs(){
             return this.handObjs;
+        },
+        getHandObject(idx){
+            return this.handObjs[idx];
         },
         getUserHand(){
             return this.handsElements[this.handsElements.length-1];
