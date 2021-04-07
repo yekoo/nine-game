@@ -12,6 +12,29 @@ body{
     overflow: hidden;
     min-height: 640px;
 }
+.menu{
+    position:absolute;
+    width: 100%;
+    height:100%;
+    background: white;
+    z-index: 5;
+    h1{
+        text-align: center;
+    }
+}
+.menu__buton{
+    width:200px;
+    margin:20px auto;
+    background: rgb(214, 68, 42);
+    border-radius: 12px;
+    padding: 12px;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+.menu__buton:hover{
+    background: rgb(184, 28, 0);
+}
 
 
 .table{
@@ -148,6 +171,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    animation-duration: .3s;
 
     .faceUp{
         display: block;
@@ -213,12 +237,61 @@ body{
     color: white;
     // bottom: 4px;
     // right: 4px;
+    text-align: center;
     top:0;
     right:0;
     bottom: 0;
     left:0;
     margin:auto;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, .1);
+}
+
+
+
+.putCardFromUser{
+    animation-name: tabledCardFromUser;
+}
+.putCardFromTop{
+    animation-name: tabledCardFromTop;
+}
+.putCardFromLeft{
+    animation-name: tabledCardFromLeft;
+}
+.putCardFromRight{
+    animation-name: tabledCardFromRight;
+}
+  
+@keyframes tabledCardFromUser {
+    from {
+      transform: translate(0, 120px);
+    }
+    to {
+      transform: translate(0, 0);
+    }
+}
+@keyframes tabledCardFromTop {
+    from {
+      transform: translate(0, -120px);
+    }
+    to {
+      transform: translate(0, 0);
+    }
+}
+@keyframes tabledCardFromLeft {
+    from {
+      transform: translate(-120px, 0px);
+    }
+    to {
+      transform: translate(0, 0);
+    }
+}
+@keyframes tabledCardFromRight {
+    from {
+      transform: translate(120px, 0px);
+    }
+    to {
+      transform: translate(0, 0);
+    }
 }
 
 @import 'todo';
