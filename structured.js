@@ -66,6 +66,9 @@ function Hand(handId, userHand){
             this.domElement.appendChild(cardArr[c].domElement);
         }
     }
+    this.clearHand = ()=>{
+        this.domElement.textContent = "";
+    };
     this.hasOneOfCards = (cards)=>{
         var result = cards.filter( (o1)=> {
             return this.cards.some( (o2)=> {
@@ -138,7 +141,6 @@ function Column(element, suit, suitChar){
         if( !(this.midPart.children.length-1) ){
             return [{suit:this.suit, rank:3, code:(this.suit+""+3)}];
         }
-        // console.log(">>> ",this.midPart.children.length);
 
         let topWaiting = this.topPart.children.length+4;
         if(topWaiting<9)
@@ -158,6 +160,13 @@ function Column(element, suit, suitChar){
                 code: (this.suit+""+botWaiting),
             });
         return emptySpaces;
+    },
+    this.clearColumn = ()=>{
+        console.log("Clear column");
+        // this.domElement.textContent = "";
+        this.topPart.textContent = "";
+        this.midPart.textContent = "";
+        this.botPart.textContent = "";
     }
 }
 
@@ -173,7 +182,7 @@ let game = {
         
         const dividedStack = this.dataStack.divideStack(this.playersNum);
         this.hands.fill(dividedStack);
-        // this.hands[playersNum-1].setOnClick();
+        
         this.hands.setUserCardOnClick((e)=>{this.playerCardClick(e);});
         
         this.table.setPlayersCount(this.playersNum);
@@ -239,12 +248,7 @@ let game = {
         this.playerLabel.change(idx);
     },
     playerPass(){
-        // alert("No cards to move... PASS");
-        console.info("NO CARDS!!!!!!!!!!!!!!");
         this.nextPlayerTurn();
-    },
-    playerWon(idx){
-        console.info(` ' '' ' ' '' Player №${idx} has WON!`);
     },
     isPlayerHuman(){
         return this.currentPlayer==(this.playersNum-1);
@@ -253,18 +257,26 @@ let game = {
         //  взять колоду карт и найти там соответствующие КОДУ карты
         let cardObjs = [];
 
-        // console.log(this.hands.getHandObjs()[this.currentPlayer].cards);
         for(let obj of waitingObjs){
             let card = this.hands.getHandObject(this.currentPlayer).cards.find(crd => crd.code==obj.code)
             if(card)
                 cardObjs.push(card);
         }
-        // console.log(cardObjs);
         return cardObjs;
     },
     nextPlayerTurn(){
         if( this.checkCardsOver(this.currentPlayer) ){
-            alert("FINISHED by "+this.currentPlayer+" player ((x")
+            const restart = confirm("FINISHED by "+this.currentPlayer+" player. /nDo you want to start a new game?")
+            if(restart){
+                this.vanishGame();
+                //  очистить все данные
+                //  аккуратно убрать созданные DOM-элементы
+                this.initGame(this.currentPlayer);
+                this.startGame();
+            }else{
+                this.vanishGame();
+                showMenu();
+            }
             return;
         }
         let cruNum = this.currentPlayer + 1;
@@ -286,10 +298,18 @@ let game = {
         }
     },
     checkCardsOver(playerNum){
-        console.log(this.hands.getHandObject(this.currentPlayer));
+        // console.log(this.hands.getHandObject(this.currentPlayer));
         const isOver = this.hands.getHandObject(this.currentPlayer).isHandEmpty()
-        console.log('Check is all player cards is over? '+isOver);
+        // console.log('Check is all player cards is over? '+isOver);
         return isOver;
+    },
+
+    vanishGame(){
+         this.hands.clear();
+         this.table.clearTable();
+         console.log("no more game, just clear hand/table");
+        //  this.table
+
     },
 
     playerLabel:{
@@ -373,9 +393,6 @@ let game = {
             ["putCardFromLeft","putCardFromTop","putCardFromRight","putCardFromUser"],
         ],
         currentPlayer:0,
-
-        // putCard(card){},
-
         columns:[],
 
         setPlayersCount(num){
@@ -393,9 +410,11 @@ let game = {
         },
         getWaitingCards(){
             let allWaitingCards = [];
+            console.log("Start to create arr allWaitingCards");
             for(let col of this.columns){
                 allWaitingCards.push(... col.getSuitWaitingCards());
             }
+            console.log("created arr allWaitingCards", allWaitingCards);
              if(allWaitingCards.some((elm)=>{
                 return (elm.rank+""+elm.suit)=="33";
             }) ){
@@ -426,6 +445,12 @@ let game = {
             cardElem.classList.add(animationClass);
         },
 
+        clearTable(){
+            console.log("Clear table");
+            for(const column of this.columns){
+                column.clearColumn();
+            }
+        },
         
 
     },
@@ -468,6 +493,11 @@ let game = {
             }
             this.userHand = this.handObjs[this.handObjs.length-1];
         },
+        clear(){
+            for(let hand of this.handObjs){
+                hand.clearHand();
+            }
+        },
         setUserCardOnClick(handler){
             this.handObjs[this.handObjs.length-1].setOnClick(handler);
         },
@@ -486,7 +516,8 @@ let game = {
 }
 
 function showMenu(){
-    
+    const menuElem = document.getElementById("menu");
+    menuElem.style = "display:block;";
 }
 function hideMenu(){
     const menuElem = document.getElementById("menu");
