@@ -37,6 +37,9 @@ function Card(suit, suitChar, rank, rankChar){
         </div>`);
         // this.domElement.addEventListener('click', this.cardClicked);
     };
+    this.hiliteAsSuitable = ()=>{
+        this.domElement.classList.add("user__card_suitable");
+    };
     this.setOnClick = (handler)=>{
         this.onClick = handler;
         this.domElement.addEventListener("click", this.onClick);
@@ -47,19 +50,29 @@ function Hand(handId, userHand){
     this.domElement = document.getElementById(handId);
     this.getElement = ()=>{ return this.domElement};
     this.cards = null;// []
+    this.cardOnClick = null;
 
     this.setOnClick = (handler)=>{
         console.log("Hand click handler setting");
-        for(let c=0; c<this.cards.length; c++){
+        this.cardOnClick = handler;
+        /*for(let c=0; c<this.cards.length; c++){
             this.cards[c].setOnClick(handler);
-        }
+        }*/
     };
     this.setCardsFaceUp = (how)=>{
         for(let c=0; c<this.cards.length; c++){
             this.cards[c].setFaceUp(how);
         }
     };
-    this.hiliteProperCards = ()=>{};
+    this.hiliteProperCards = (suitable)=>{
+        for(let card of suitable){
+            let properCard = this.cards.find(elm => `${elm.code}` === `${card.code}`);
+            if(properCard) {
+                properCard.setOnClick(this.cardOnClick);
+                properCard.hiliteAsSuitable();
+            };
+        }
+    };
     this.fillCards = (cardArr)=>{
         this.cards = cardArr;
         for(let c=0; c<cardArr.length; c++){
@@ -229,6 +242,7 @@ let game = {
         if(itPlayerHuman){
             //      ЧЕЛОВЕК: сделать карты руки доступными для мыши
             console.log("ALLOW HAND MOUSE");
+            this.hands.userHand.hiliteProperCards(hasProperCards);
             this.hands.allowUserHand(true);
             //  одидание клика:
         }else{
@@ -474,13 +488,26 @@ let game = {
             return this.handsElements[this.handsElements.length-1];
         },
         allowUserHand(how){
-            let pointerMode = "pointer-events:";
+            console.log(this.userHand);
+            /*const allowedCards = this.userHand.domElement.children.filter((elm)=>{
+                elm.classList.some(".user__card_suitable")});
+            console.log("+++++++++++>",allowedCards);*/
+            const allowedCards = [];
+            for(let i=0; i<this.userHand.domElement.children.length; i++){
+                this.userHand.domElement.children[i].style = "pointer-events:"+(how?"auto":"none");
+            }
+            // allowedCards.map((elm)=>{elm.style="pointer-events:"+how?"auto":"none"});
+            /*let pointerMode = "pointer-events:";
             if(how)
                 pointerMode+="auto;";
             else
-                pointerMode+="none;";
-            this.userHand.domElement.style=pointerMode;
+                pointerMode+="none!";
+            this.userHand.domElement.style=pointerMode;*/
         },
+        /*changeUserHandActicity(how){
+            const allowedCards = this.userHand.querySelector(".user__card_suitable");
+            allowedCards.map((elm)=>elm.style="pointer-events:"+how?"auto":"none");
+        }*/
         fill(handsCards){
             this.handsElements = this.getActiveHands(handsCards.length);
 

@@ -11,6 +11,7 @@ body{
     position: relative;
     overflow: hidden;
     min-height: 640px;
+    background: #444;
 }
 .menu{
     position:absolute;
@@ -208,12 +209,11 @@ body{
     width: 100%;
     justify-content: center;
 
-    /*.user__card::first-letter{
-        color: red;
-    }*/
+    
     .user__card{
         margin-right: -50px;
         transition: margin .3s;
+        pointer-events: none;
 
         >*{
             pointer-events: none;
@@ -225,6 +225,10 @@ body{
     .user__card:hover{
         margin-top: -24px;
     }
+    .user__card_suitable{
+        margin-top: -14px;
+        pointer-events: auto;
+    }
 }
 
 .playerLabel{
@@ -234,9 +238,11 @@ body{
     background: orange;
     box-sizing: border-box;
     border-radius: 24px;
+    font-weight: bold;
     color: white;
-    // bottom: 4px;
-    // right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     top:0;
     right:0;
