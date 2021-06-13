@@ -25,6 +25,11 @@ body {
   text-align: center;
 }
 
+.menu #main-title-stats {
+  text-align: center;
+  font-weight: normal;
+}
+
 .menu__buton {
   width: 200px;
   margin: 20px auto;
@@ -35,10 +40,28 @@ body {
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   text-align: center;
+  cursor: pointer;
 }
 
 .menu__buton:hover {
   background: #b81c00;
+}
+
+.back_btn:hover {
+  background: #ff806f;
+  margin-top: 3px;
+}
+
+.back_btn {
+  background: #e65;
+  border-radius: 20px;
+  width: 45px;
+  padding: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 4px;
+  margin-left: 4px;
 }
 
 .table {
@@ -147,6 +170,10 @@ body {
   cursor: pointer;
 }
 
+.table .table__card {
+  background: white;
+}
+
 .opponentHand {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -232,7 +259,7 @@ body {
   z-index: 1;
   width: 80px;
   height: 120px;
-  background: white;
+  background: #f0f0f0;
   border-radius: 16px;
   border: 1px solid grey;
   -webkit-box-sizing: border-box;
@@ -296,9 +323,6 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  /*.user__card::first-letter{
-        color: red;
-    }*/
 }
 
 .user__hand .user__card {
@@ -319,9 +343,12 @@ body {
 .user__hand .user__card:hover {
   margin-top: -24px;
 }
-.user__hand .user__card_suitable{
+
+.user__hand .user__card_suitable {
   margin-top: -14px;
   pointer-events: auto;
+  background: -webkit-gradient(linear, left bottom, left top, from(#f0f0f0), to(white));
+  background: linear-gradient(0deg, #f0f0f0, white);
 }
 
 .playerLabel {

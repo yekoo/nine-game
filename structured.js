@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 function Card(suit, suitChar, rank, rankChar){
     this.suit = suit;
     this.suitChar = suitChar;
@@ -178,7 +176,14 @@ function Column(element, suit, suitChar){
         console.log("Clear column");
         // this.domElement.textContent = "";
         this.topPart.textContent = "";
-        this.midPart.textContent = "";
+        // this.midPart.textContent = "";
+        // console.log(">>> ", this.midPart, this.midPart.children);
+        for( let card of this.midPart.children){
+            // console.log(card.className);
+            if(card.className != "column__kind-symbol")
+                card.remove();
+        }
+        //  убрать отличные от .column__kind-symbol карты
         this.botPart.textContent = "";
     }
 }
@@ -186,7 +191,7 @@ function Column(element, suit, suitChar){
 let game = {
     playersNum:null,
     currentPlayer:0,
-    playerDomLabel:null,
+    // playerDomLabel:null,
 
     initGame(playersNum){
         this.playersNum = playersNum;
@@ -281,15 +286,15 @@ let game = {
     nextPlayerTurn(){
         if( this.checkCardsOver(this.currentPlayer) ){
             const restart = confirm("FINISHED by "+this.currentPlayer+" player. /nDo you want to start a new game?")
-            if(restart){
+            if(restart) {
                 this.vanishGame();
                 //  очистить все данные
                 //  аккуратно убрать созданные DOM-элементы
                 this.initGame(this.currentPlayer);
                 this.startGame();
             }else{
-                this.vanishGame();
-                showMenu();
+                //this.vanishGame();
+                //showMenu();
             }
             return;
         }
@@ -322,7 +327,7 @@ let game = {
          this.hands.clear();
          this.table.clearTable();
          console.log("no more game, just clear hand/table");
-        //  this.table
+        //  clear all variables
 
     },
 
@@ -492,22 +497,14 @@ let game = {
             /*const allowedCards = this.userHand.domElement.children.filter((elm)=>{
                 elm.classList.some(".user__card_suitable")});
             console.log("+++++++++++>",allowedCards);*/
-            const allowedCards = [];
+            // const allowedCards = [];
             for(let i=0; i<this.userHand.domElement.children.length; i++){
                 this.userHand.domElement.children[i].style = "pointer-events:"+(how?"auto":"none");
             }
-            // allowedCards.map((elm)=>{elm.style="pointer-events:"+how?"auto":"none"});
-            /*let pointerMode = "pointer-events:";
-            if(how)
-                pointerMode+="auto;";
-            else
-                pointerMode+="none!";
-            this.userHand.domElement.style=pointerMode;*/
+            
         },
-        /*changeUserHandActicity(how){
-            const allowedCards = this.userHand.querySelector(".user__card_suitable");
-            allowedCards.map((elm)=>elm.style="pointer-events:"+how?"auto":"none");
-        }*/
+        
+        
         fill(handsCards){
             this.handsElements = this.getActiveHands(handsCards.length);
 

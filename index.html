@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>9 Game</title>
-    <script
+    <!--<script
 			  src="https://code.jquery.com/jquery-3.5.1.js"
 			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-              crossorigin="anonymous"></script>
+              crossorigin="anonymous"></script>-->
     <!-- <script src="./script.js" defer></script> -->
     <!-- <script src="./script-oop.js" defer></script> -->
     <script src="./structured.js" defer></script>
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
+    <!--
     <details class="todo">
         <summary class="todo__summ">TODO</summary>
         <ul class="todo__items">
@@ -44,14 +45,23 @@
             <li>Сделать более нагядное отображение текущего игрока (выезжание руки чуть в центр)</li>
         </ul>
     </details>
+-->
 
     <div class="center">
+        
         <div class="menu" id="menu">
             <h1>9-Game</h1>
+            <h5 id="main-title-stats">Всего сыграно игр: 58</h5>
 
             <div class="menu__buton" onclick="startGame(2);">Start with 2 players</div>
+
+
             <div class="menu__buton" onclick="startGame(3);">Start with 3 players</div>
+
+
             <div class="menu__buton" onclick="startGame(4);">Start with 4 players</div>
+
+
         </div>
 
         <div class="table" id="table">
@@ -110,6 +120,7 @@
 
         <div class="playerLabel" id="playerLabel"></div>
         
+        <div class="back_btn">&lt;</div>
     </div>
 </body>
 </html>
