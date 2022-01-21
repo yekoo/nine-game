@@ -4,48 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>9 Game</title>
-    <!--<script
-			  src="https://code.jquery.com/jquery-3.5.1.js"
-			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-              crossorigin="anonymous"></script>-->
-    <!-- <script src="./script.js" defer></script> -->
-    <!-- <script src="./script-oop.js" defer></script> -->
+
     <script src="./structured.js" defer></script>
 
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <!--
-    <details class="todo">
-        <summary class="todo__summ">TODO</summary>
-        <ul class="todo__items">
-            <li><details class="todo__items_greatTask">
-                <summary>Пересобрать имеемое в объекную конструкцию, чтоб данные брались не от HTML-элементов, а из МОДЕЛИ и работалось все также в МОДЕЛИ</summary>
-                <ol>
-                    <li>сделать showSuitableCards для отображения свободных мест</li>
-                    <li>Сделать функцию удаления/добавления только внутри одной колонки</li>
-                </ol>
-            </details></li>
-            <li class="todo__items_done">добавить проверку дозволенности класть карты (вешать слушатели кликов только на дозволенные карты)</li>
-            <li class="todo__items_done">Для челлвека: выделить доступные для хода</li>
-            <li class="todo__items_done">чел: повесить на них мышиные слушатели</li>
-            <li><details class="todo__items_greatTask">
-                <summary>Сделать мозги оппонента</summary>
-                <ol>
-                    <li><s>cpu: если простой уровень сложности, класть рандомные карты</s></li>
-                    <li>cpu: если сложный, применять мега-</li>
-                    <li>Сделать "Думаю" вместе с анимированной иконкой</li>
-                </ol>
-            </details>
-            </li>
-            <li class="todo__items_done">Прижать руки оппонентов к краям экранв</li>
-            <li>Вешать слушатели Клика только после проверки их возможности играть</li>
-            <li class="todo__items_done">Проверить все возможные количества игроков</li>
-            <li class="todo__items_done">Сделать меню с возможностью выбрать количество иргоков</li>
-            <li>Сделать более нагядное отображение текущего игрока (выезжание руки чуть в центр)</li>
-        </ul>
-    </details>
--->
+   
 
     <div class="center">
         
@@ -54,11 +19,7 @@
             <h5 id="main-title-stats">Всего сыграно игр: 58</h5>
 
             <div class="menu__buton" onclick="startGame(2);">Start with 2 players</div>
-
-
             <div class="menu__buton" onclick="startGame(3);">Start with 3 players</div>
-
-
             <div class="menu__buton" onclick="startGame(4);">Start with 4 players</div>
 
 
@@ -119,8 +80,17 @@
         <div class="user__hand" id="user__hand"></div>
 
         <div class="playerLabel" id="playerLabel"></div>
-        
         <div class="back_btn">&lt;</div>
     </div>
+
+    <details>
+        <summary>todo</summary>
+        <ul>
+            <li>Сделать праздничный эффект про выигрывшего</li>
+            <li>отказаться от CONFIRM</li>
+            <li>Сделать выделение текущего игрока более явным</li>
+            <li>устроить эффекты перехода МЕНЮ-СТОЛ</li>
+        </ul>
+    </details>
 </body>
 </html>

@@ -50,6 +50,9 @@ function Hand(handId, userHand){
     this.cards = null;// []
     this.cardOnClick = null;
 
+    //this.activeClassName = this.domElement.classList;
+    console.log("::::::::: classList",this.domElement.classList );
+
     this.setOnClick = (handler)=>{
         console.log("Hand click handler setting");
         this.cardOnClick = handler;
@@ -96,7 +99,8 @@ function Hand(handId, userHand){
         setTimeout(() => {
             gameInsertHandler(chosenCard.domElement);
             nextTurnHandler();
-        }, 1300);
+        }, 1200);
+        //  1900
     }
     this.findAndRemoveCard = (card)=>{
         const index = this.cards.findIndex((element, index) => {
@@ -191,14 +195,12 @@ function Column(element, suit, suitChar){
 let game = {
     playersNum:null,
     currentPlayer:0,
-    // playerDomLabel:null,
-
     initGame(playersNum){
         this.playersNum = playersNum;
         this.dataStack.generateStack();
         this.dataStack.shuffleCards();
-        
         const dividedStack = this.dataStack.divideStack(this.playersNum);
+        console.log(">>>>>>>",dividedStack);
         this.hands.fill(dividedStack);
         
         this.hands.setUserCardOnClick((e)=>{this.playerCardClick(e);});
@@ -235,13 +237,14 @@ let game = {
         let hasProperCards = currentHand.hasOneOfCards(waitingCards);
 
         //alert("~ ~ ~ ~ > HIs hand empty? "+currentHand.cards.length);
+        console.log("> > > > > ",this.hands);
         if(currentHand.isHandEmpty()){
             alert("~~~~~~~~~~> Hand empty. The winner is "+this.currentPlayer);
         }else if(gatheredCards.length==0){
             this.playerPass();
             return;
         }
-
+        
         //  определить, ткущий игрок это, ЧЕЛОВЕК или КОМП
         const itPlayerHuman = this.isPlayerHuman();
         if(itPlayerHuman){
@@ -285,12 +288,13 @@ let game = {
     },
     nextPlayerTurn(){
         if( this.checkCardsOver(this.currentPlayer) ){
+            // debugger;
             const restart = confirm("FINISHED by "+this.currentPlayer+" player. /nDo you want to start a new game?")
             if(restart) {
                 this.vanishGame();
                 //  очистить все данные
                 //  аккуратно убрать созданные DOM-элементы
-                this.initGame(this.currentPlayer);
+                this.initGame(this.playersNum);
                 this.startGame();
             }else{
                 //this.vanishGame();
@@ -355,6 +359,7 @@ let game = {
     dataStack:{
         cardSuits:["♣","♥","♠","♦"],
         cardRanks:["6","7","8","9","10","J","Q","K","A"],
+        
         cards:null,
         handsCards:null,
         getSuits(){ return this.cardSuits; },
@@ -385,7 +390,7 @@ let game = {
         },
         divideStack(playersCount){
             this.handsCards = [];
-            let playerCardsNum = 36/playersCount;
+            let playerCardsNum = this.cards.length/playersCount;
             
             for(let i=0; i<playersCount; i++){
                 let handCards = this.cards.splice(0, playerCardsNum);
@@ -452,15 +457,15 @@ let game = {
             this.currentPlayer = num;
         },
         insertCard(cardElem){
-            // console.log(cardElem);
+            /*  отправка Карты на Стол*/
             let cardCode = cardElem.dataset.code;
             let cardSuit = +cardCode[0];
             let cardRank = +cardCode[1];
-            // console.log(this+" -> Clicked card props: "+cardSuit+" "+cardRank);
+            
             this.columns[cardSuit].putCard(cardElem, cardRank);
-            // cardElem.classList.add( animationClasses[this.currentPlayer] );
+            
             const animationClass = this.animationClasses[this.playersCount][this.currentPlayer] 
-            console.log(this.playersCount+" - "+this.currentPlayer+"%%%%%%%%%%%%%%%%% "+animationClass);
+            
             cardElem.classList.add(animationClass);
         },
 
@@ -507,7 +512,7 @@ let game = {
         
         fill(handsCards){
             this.handsElements = this.getActiveHands(handsCards.length);
-
+            console.log(this.handsElements);
             for(let h=0; h<this.handsElements.length; h++){
                 const hand = new Hand(this.handsElements[h]);
                 hand.fillCards(handsCards[h]);
@@ -521,6 +526,7 @@ let game = {
             for(let hand of this.handObjs){
                 hand.clearHand();
             }
+            this.handObjs = [];
         },
         setUserCardOnClick(handler){
             this.handObjs[this.handObjs.length-1].setOnClick(handler);
@@ -539,8 +545,15 @@ let game = {
     }
 }
 
+
+
+const back_btn = document.getElementsByClassName("back_btn")[0];
+console.log("back_btn"+back_btn);
+back_btn.onclick = ()=>{showMenu()};
+
 function showMenu(){
     const menuElem = document.getElementById("menu");
+    game.vanishGame();
     menuElem.style = "display:block;";
 }
 function hideMenu(){

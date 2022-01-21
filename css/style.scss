@@ -2,6 +2,9 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
 }
+ul{
+    font-size: 12px;
+}
 .center{
     border: 1px solid orange;
     //padding-left:  calc(50% - 40vw);
@@ -133,6 +136,7 @@ body{
 .opponentHand{
     display: flex;
     position: absolute;
+    transition: all 0.7s;
 }
 
 .hand__top{
@@ -148,6 +152,10 @@ body{
         margin-top: -70px;
     }
 }
+.hand__top_active{
+    top: -20px;
+}
+
 .hand__rite{
     right: 0;
     height: 100%;
@@ -159,6 +167,9 @@ body{
         margin-right: -40px;
     }
 }
+.hand__rite_active{
+    right: -20px;
+}
 .hand__left{
     justify-content: center;
     flex-direction: column;
@@ -169,6 +180,9 @@ body{
         margin: -50px 0;
         margin-left: -40px;
     }
+}
+.hand__left_active{
+    left: -20px;
 }
 
 .column__kind-symbol{
@@ -232,7 +246,7 @@ body{
     bottom: -50px;
     width: 100%;
     justify-content: center;
-
+    transition: all 0.7s;
     
     .user__card{
         margin-right: -50px;
