@@ -1,6 +1,7 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
+  background: #000;
 }
 
 ul {
@@ -8,7 +9,6 @@ ul {
 }
 
 .center {
-  border: 1px solid orange;
   margin-left: calc(50% - 40vw);
   margin-right: calc(50% - 40vw);
   position: relative;
@@ -21,7 +21,8 @@ ul {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: white;
+  background: #444;
+  color: white;
   z-index: 5;
 }
 
@@ -34,38 +35,57 @@ ul {
   font-weight: normal;
 }
 
-.menu__buton {
+.menu__button {
   width: 200px;
   margin: 20px auto;
-  background: #d6442a;
+  background: tomato;
   border-radius: 12px;
   padding: 12px;
-  color: white;
+  color: #555;
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   text-align: center;
   cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: black;
 }
 
-.menu__buton:hover {
-  background: #b81c00;
+.menu__button img {
+  height: 36px;
+}
+
+.menu__button:hover {
+  background: #e75704;
 }
 
 .back_btn:hover {
   background: #ff806f;
-  margin-top: 3px;
 }
 
 .back_btn {
   background: #e65;
   border-radius: 20px;
   width: 45px;
-  padding: 12px;
+  padding: 5px 9px;
   position: absolute;
   top: 0;
   left: 0;
   margin-top: 4px;
   margin-left: 4px;
+  width: auto;
+  border-radius: 3px;
+}
+
+.back_btn img {
+  height: 30px;
 }
 
 .table {
@@ -517,6 +537,107 @@ ul {
     margin-left: 0;
     margin-right: 0;
   }
+}
+
+.congratulations_show {
+  display: block !important;
+  top: 0 !important;
+  opacity: 1 !important;
+  z-index: 5;
+}
+
+.congratulations {
+  opacity: 0;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 340px;
+  height: 300px;
+  -webkit-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+  z-index: 1;
+}
+
+.congratulations .congratulations__balloons-bg {
+  width: 100%;
+  height: 100%;
+  background: url(../img/balloons-ok.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.congratulations .congratulations__text {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  background: #ddd;
+  border: 1px solid rgba(120, 25, 25, 0.3);
+  background: #f1bbfa;
+  background-image: radial-gradient(circle at -65px calc(100% - 340px), #ffd071 42%, #f1b8fa 62%, #b8f6cd 79%, #8c9df9 98%);
+  border-radius: 12px;
+  padding: 16px;
+  width: 200px;
+  height: 120px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.congratulations .congratulations__text h3 {
+  margin: 12px 0;
+  text-align: center;
+  background: gold;
+  text-shadow: white 0px 1px;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.congratulations .congratulations__text .congratulations__btns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.congratulations .congratulations__text .congratulations__btns button {
+  border: 0;
+  padding: 8px;
+  background: lightseagreen;
+  text-align: center;
+  width: 85px;
+  border-radius: 3px;
+  color: white;
+}
+
+.congratulations .congratulations__text .congratulations__btns button:hover {
+  background: #20d8cf;
+}
+
+.congratulations .congratulations__text .congratulations__btns button:active {
+  background: #1c9e98;
+}
+
+.todo {
+  color: grey;
 }
 
 .todo {

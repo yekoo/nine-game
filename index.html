@@ -11,16 +11,22 @@
 </head>
 <body>
    
-
+    
     <div class="center">
         
         <div class="menu" id="menu">
             <h1>9-Game</h1>
             <h5 id="main-title-stats">Всего сыграно игр: 58</h5>
 
-            <div class="menu__buton" onclick="startGame(2);">Start with 2 players</div>
-            <div class="menu__buton" onclick="startGame(3);">Start with 3 players</div>
-            <div class="menu__buton" onclick="startGame(4);">Start with 4 players</div>
+            <div class="menu__button" onclick="startGame(2);">
+                <img src="./img/human.png"> : <img src="./img/cpu.png">
+            </div>
+            <div class="menu__button" onclick="startGame(3);">
+                <img src="./img/human.png"> : <img src="./img/cpu.png"><img src="./img/cpu.png">
+            </div>
+            <div class="menu__button" onclick="startGame(4);">
+                <img src="./img/human.png"> : <img src="./img/cpu.png"><img src="./img/cpu.png"><img src="./img/cpu.png">
+            </div>
 
 
         </div>
@@ -80,16 +86,34 @@
         <div class="user__hand" id="user__hand"></div>
 
         <div class="playerLabel" id="playerLabel"></div>
-        <div class="back_btn">&lt;</div>
+        <div class="back_btn">
+            <img src="./img/mune-back.png">
+        </div>
+
+        <div class="congratulations">
+            <!-- <img src="./img/balloons-wide.png"> -->
+            <div class="congratulations__balloons-bg"></div>
+            <div class="congratulations__text">
+                <h3>Congratulations!</h3>
+                great job, friend # 5!
+                <div class="congratulations__btns">
+                    <button id="congr-repeat">Repeat</button>
+                    <button id="congr-menu">Menu</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <details>
+    <details class="todo">
         <summary>todo</summary>
         <ul>
             <li>Сделать праздничный эффект про выигрывшего</li>
             <li>отказаться от CONFIRM</li>
-            <li>Сделать выделение текущего игрока более явным</li>
+            <li>Сделать выделение текущего игрока более явным (выезжания из-за края экрана)</li>
             <li>устроить эффекты перехода МЕНЮ-СТОЛ</li>
+            <li>Сделать в меню выбок кол-ва игроков/компов</li>
+            <li>Устроить переключалку уровня умности компа</li>
+            <li>Сделать выбор финиша - выигрывший/проигравший</li>
         </ul>
     </details>
 </body>
