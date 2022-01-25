@@ -151,11 +151,11 @@ ul{
 .opponentHand{
     display: flex;
     position: absolute;
-    transition: all 0.7s;
+    transition: all 0.2s ease-out;
 }
 
 .hand__top{
-    top: 0;
+    top: -30px;
     margin: 0 auto;
     justify-content: center;
     width: 100%;
@@ -172,7 +172,7 @@ ul{
 }
 
 .hand__rite{
-    right: 0;
+    right: -25px;
     height: 100%;
     justify-content: center;
     flex-direction: column;
@@ -189,7 +189,7 @@ ul{
     justify-content: center;
     flex-direction: column;
     height: 100%;
-    left: 0;
+    left: -25px;
     margin: auto 0;
     .opponent__card{
         margin: -50px 0;
@@ -413,8 +413,8 @@ ul{
         border: 1px solid rgba(120,25,25,0.3);
         background: rgb(241,187,250);
         //box-shadow: rgba(255, 255, 2550, 0.7) 0 0 20px;
-        background-image:radial-gradient(circle at -65px calc(100% - 340px), #ffd071 42%, #f1b8fa 62%, #b8f6cd 79%, #8c9df9 98%);
-
+        // background-image:radial-gradient(circle at -65px calc(100% - 340px), #ffd071 42%, #f1b8fa 62%, #b8f6cd 79%, #8c9df9 98%);
+        background-image:radial-gradient(circle at -65px calc(100% - 340px), #dfb071 42%, #f1d85a 62%, #d8a64d 79%, #fcdd19 98%);
         border-radius: 12px;
         padding:16px;
         width:200px;
@@ -422,7 +422,12 @@ ul{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        h3{
+
+
+        .congratulations__message{
+            text-align: center;
+        }
+        .congratulations__title{
             margin: 12px 0;
             text-align: center;
             background: gold;

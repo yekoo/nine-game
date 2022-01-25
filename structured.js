@@ -44,15 +44,15 @@ function Card(suit, suitChar, rank, rankChar){
     }
 };
 
-function Hand(handId, userHand){
+function Hand(handId, handIdx){
     this.domElement = document.getElementById(handId);
     this.getElement = ()=>{ return this.domElement};
     this.cards = null;// []
     this.cardOnClick = null;
+    this.handIdx = handIdx;
 
 
     this.setOnClick = (handler)=>{
-        // console.log("Hand click handler setting");
         this.cardOnClick = handler;
         /*for(let c=0; c<this.cards.length; c++){
             this.cards[c].setOnClick(handler);
@@ -92,12 +92,11 @@ function Hand(handId, userHand){
     }
     this.computerChoose = (tableWaitings, gameInsertHandler, nextTurnHandler)=>{
         let chosenCard = this.easyCpuChoose(tableWaitings);
-        // console.log("{{{",tableWaitings[0]);
         this.findAndRemoveCard(chosenCard);
         setTimeout(() => {
             gameInsertHandler(chosenCard.domElement);
             nextTurnHandler();
-        }, 200);
+        }, 800);
         //  1900
     }
     this.findAndRemoveCard = (card)=>{
@@ -106,23 +105,32 @@ function Hand(handId, userHand){
                 return true
             }
         });
-        // console.log("Card in array found!"+index);
+        
         this.cards.splice(index, 1);
     }
     this.easyCpuChoose = (waitingCards)=>{
         const randIdx = Math.floor( Math.random() * (waitingCards.length-1));
         return waitingCards[randIdx];
     }
-    this.masterCpuChoose = ()=>{
+    this.expertCpuChoose = ()=>{
 
     }
     this.isHandEmpty = ()=>{
         return this.cards.length==0;
+    },
+
+    this.hiliteHand = (shiftStyle)=>{
+        console.log("--- hilite");
+        this.domElement.style = shiftStyle;
+    }
+    this.unhiliteHand = ()=>{
+        console.log("--- unhilite");
+        this.domElement.style = "shiftStyle";
     }
 }
 
 function Column(element, suit, suitChar){
-    // console.log(element, suit, suitChar);
+    
     this.domElement = element;//document.getElementById(colId);
     this.suit = suit;
     this.suitChar = suitChar;
@@ -179,9 +187,9 @@ function Column(element, suit, suitChar){
         // this.domElement.textContent = "";
         this.topPart.textContent = "";
         // this.midPart.textContent = "";
-        // console.log(">>> ", this.midPart, this.midPart.children);
+        
         for( let card of this.midPart.children){
-            // console.log(card.className);
+            
             if(card.className != "column__kind-symbol")
                 card.remove();
         }
@@ -193,12 +201,13 @@ function Column(element, suit, suitChar){
 let game = {
     playersNum:null,
     currentPlayer:0,
+    hiliteDirectioStyles:["left:0", "top:0","right:0","bottom:-40px"],
     initGame(playersNum){
         this.playersNum = playersNum;
         this.dataStack.generateStack();
         this.dataStack.shuffleCards();
         const dividedStack = this.dataStack.divideStack(this.playersNum);
-        // console.log(">>>>>>>",dividedStack);
+        
         this.hands.fill(dividedStack);
         
         this.hands.setUserCardOnClick((e)=>{this.playerCardClick(e);});
@@ -214,13 +223,13 @@ let game = {
         this.table.insertCard(e.target);
 
         const userHandEmpty = this.hands.getHandObject( this.currentPlayer).isHandEmpty();
-        // console.log(userHandEmpty);
+        
         this.nextPlayerTurn();
     },
     startGame(){
         //  найти первого игрока
         this.currentPlayer = this.findFirstPlayer();
-        // console.log("===== "+this.currentPlayer);
+        
         this.playerTurn();
         
     },
@@ -230,12 +239,14 @@ let game = {
         const waitingCards = this.table.getWaitingCards();
         //  собрать все икомые объекты Карт из колоды
         const gatheredCards = this.gatherConcreteCards(waitingCards);
+        
         //  сверить КАРТЫ текущего игрока с ожидаемыми картами на столе
         let currentHand = this.hands.getHand(this.currentPlayer)
         let hasProperCards = currentHand.hasOneOfCards(waitingCards);
 
         //alert("~ ~ ~ ~ > HIs hand empty? "+currentHand.cards.length);
-        // console.log("> > > > > ",this.hands);
+        currentHand.hiliteHand(this.hiliteDirectioStyles[this.currentPlayer]);
+
         if(currentHand.isHandEmpty()){
             alert("~~~~~~~~~~> Hand empty. The winner is "+this.currentPlayer);
         }else if(gatheredCards.length==0){
@@ -247,12 +258,12 @@ let game = {
         const itPlayerHuman = this.isPlayerHuman();
         if(itPlayerHuman){
             //      ЧЕЛОВЕК: сделать карты руки доступными для мыши
-            // console.log("ALLOW HAND MOUSE");
+            
             this.hands.userHand.hiliteProperCards(hasProperCards);
             this.hands.allowUserHand(true);
             //  одидание клика:
         }else{
-            // console.log("BLOCK HAND MOUSE");
+            
             this.hands.allowUserHand(false);
             //      КОМП:    выбрать карту для хода
             this.hands.getHandObject(this.currentPlayer).computerChoose(
@@ -305,19 +316,22 @@ let game = {
             // showMenu();
             return;
         }
+        const wasHand = this.hands.getHand(this.currentPlayer);
+        wasHand.unhiliteHand();
         let cruNum = this.currentPlayer + 1;
         cruNum = cruNum>=this.playersNum ? 0 : cruNum;
         // cruNum = cruNum%this.playersNum;// ? 0 : cruNum;
-        console.log("cruNum: "+cruNum);
+
         this.currentPlayer = cruNum;
         this.table.changePlayer(this.currentPlayer);
+        console.log("cruNum: "+cruNum);
         this.playerTurn();
     },
     showCongratulation(playerNum){
         console.log("Show COngrats!", congratsWin);
-        //congratsWin.classList.add("congratulations_show");
-        // congratsWin.style = {opacity:1, top: 0, display: "block"};
         congratsWin.style = "display: block; opacity:1; top: 0;";
+        console.log(congratulations__message);
+        congratulations__message.innerText = "Great job, mate #"+(playerNum+1)+"!";
         //return confirm("11111111111! "+this.currentPlayer+" player. /nDo you want to start a new game?")
     },
     hideCongratulation(){
@@ -347,9 +361,9 @@ let game = {
         }
     },
     checkCardsOver(playerNum){
-        // console.log(this.hands.getHandObject(this.currentPlayer));
+        
         const isOver = this.hands.getHandObject(this.currentPlayer).isHandEmpty()
-        // console.log('Check is all player cards is over? '+isOver);
+        
         return isOver;
     },
 
@@ -460,11 +474,11 @@ let game = {
         },
         getWaitingCards(){
             let allWaitingCards = [];
-            // console.log("Start to create arr allWaitingCards");
+            
             for(let col of this.columns){
                 allWaitingCards.push(... col.getSuitWaitingCards());
             }
-            // console.log("created arr allWaitingCards", allWaitingCards);
+            
              if(allWaitingCards.some((elm)=>{
                 return (elm.rank+""+elm.suit)=="33";
             }) ){
@@ -524,7 +538,7 @@ let game = {
             return this.handsElements[this.handsElements.length-1];
         },
         allowUserHand(how){
-            // console.log(this.userHand);
+            
             /*const allowedCards = this.userHand.domElement.children.filter((elm)=>{
                 elm.classList.some(".user__card_suitable")});
             console.log("+++++++++++>",allowedCards);*/
@@ -538,9 +552,9 @@ let game = {
         
         fill(handsCards){
             this.handsElements = this.getActiveHands(handsCards.length);
-            // console.log(this.handsElements);
+            
             for(let h=0; h<this.handsElements.length; h++){
-                const hand = new Hand(this.handsElements[h]);
+                const hand = new Hand(this.handsElements[h], h);
                 hand.fillCards(handsCards[h]);
                 this.handObjs.push(hand);
                 if(h<this.handsElements.length-1)
@@ -580,6 +594,7 @@ back_btn.onclick = ()=>{showMenu()};
 function showMenu(){
     const menuElem = document.getElementById("menu");
     game.vanishGame();
+    congratsWin.style = "";
     menuElem.style = "display:block;";
 }
 function hideMenu(){
@@ -596,10 +611,15 @@ function startGame(playersNum){
 const congratsWin = document.getElementsByClassName("congratulations")[0];
 const congratsWin__restart = document.getElementById("congr-repeat");
 const congratsWin__menu   = document.getElementById("congr-menu");
+const congratulations__message = document.getElementsByClassName("congratulations__message")[0];
+console.log("Changing congats message about player "+congratulations__message);
 
-//console.log(congratsWin, congratsWin__repeat, congratsWin__menu);
+
 congratsWin__restart.onclick = ()=>{
     game.hideCongratulation();
-    console.log("RESTART");
     game.restartCurrentGame();
+}
+congratsWin__menu.onclick = ()=>{
+    showMenu();
+    game.hideCongratulation();
 }
