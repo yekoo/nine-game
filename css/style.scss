@@ -354,18 +354,39 @@ ul{
       transform: translate(0, 0);
     }
 }
-
-
-@media screen and (max-width: 540px){
-    body{
-        padding: 0;
-        margin: 0;
+@keyframes congratulations__flash_anim {
+    from {
+      opacity: 1;
+      display: block;
     }
-    .center{
-        margin-left: 0;
-        margin-right: 0;
+    to {
+        opacity: 0;
+        display:none;
     }
 }
+
+
+
+@keyframes congratulations__reward_shaking {
+    0% {
+        transform: rotate(10deg);
+    }
+    25% {
+        transform: rotate(-8deg);
+    }
+    50% {
+        transform: rotate(2deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(10deg);
+    }
+}
+
+
+
 
 .congratulations_show{
     display: block!important;
@@ -375,7 +396,7 @@ ul{
 }
 
 .congratulations{
-    // display: none;
+    display: none;
     opacity: 0;
     position: absolute;
     top:50px;
@@ -389,6 +410,26 @@ ul{
     transition: all 0.4s ease-out;
     z-index: 1;
 
+    .congratulations__flash_appear{
+        animation-name: congratulations__flash_anim;
+        display: block!important;
+        // animation-iteration-count: 1;
+    }
+    .congratulations__flash{
+        display: none;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+        background: white;
+        position: absolute;
+        width: 3000px;
+        height: 3000px;
+        margin-top: -500px;
+        margin-left: -500px;
+        margin-top: -500px;
+        margin-top: -500px;
+        
+    }
+
     .congratulations__balloons-bg{
         width:100%;
         height:100%;
@@ -398,6 +439,7 @@ ul{
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        filter: drop-shadow(2px 4px 16px black);
     }
     
     .congratulations__text{
@@ -407,6 +449,7 @@ ul{
         bottom: 0;
         right: 0;
         margin:auto;
+        box-shadow: 2px 2px 16px black;
         // transition: top 0.4s ease-out, opacity 0.4s;
         // opacity: 0;
         background: #ddd;
@@ -458,9 +501,57 @@ ul{
             }
         }
     }
+
+    .congratulations__reward{
+        position: absolute;
+        animation-name: congratulations__reward_shaking;
+        animation-iteration-count: infinite;
+        animation-duration: 1s;
+        // top: 0;
+        // display: none;
+    }
+    .congratulations__reward_left{
+        top: 10%;
+        //left: -30%;
+        left: -30vw;
+        // display: bock;
+    }
+    .congratulations__reward_top{
+        left: 20%;
+        // left: -30vw;
+        top: -70%;
+        // display: bock;
+    }
+    .congratulations__reward_right{
+        top: 10%;
+        // right: -50%;
+        right: -30vw;
+        // display: bock;
+    }
+    .congratulations__reward_bottom{
+        display: bock;
+        bottom: -60%;
+        left: 10%;
+    }
+    
 }
 .todo{
     color:grey;
 }
+
+
+
+
+@media screen and (max-width: 540px){
+    body{
+        padding: 0;
+        margin: 0;
+    }
+    .center{
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
 
 @import 'todo';

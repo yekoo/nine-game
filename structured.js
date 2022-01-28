@@ -96,7 +96,7 @@ function Hand(handId, handIdx){
         setTimeout(() => {
             gameInsertHandler(chosenCard.domElement);
             nextTurnHandler();
-        }, 800);
+        }, 300);//  800
         //  1900
     }
     this.findAndRemoveCard = (card)=>{
@@ -120,11 +120,9 @@ function Hand(handId, handIdx){
     },
 
     this.hiliteHand = (shiftStyle)=>{
-        console.log("--- hilite");
         this.domElement.style = shiftStyle;
     }
     this.unhiliteHand = ()=>{
-        console.log("--- unhilite");
         this.domElement.style = "shiftStyle";
     }
 }
@@ -183,17 +181,13 @@ function Column(element, suit, suitChar){
         return emptySpaces;
     },
     this.clearColumn = ()=>{
-        console.log("Clear column");
-        // this.domElement.textContent = "";
         this.topPart.textContent = "";
-        // this.midPart.textContent = "";
         
         for( let card of this.midPart.children){
             
             if(card.className != "column__kind-symbol")
                 card.remove();
         }
-        //  убрать отличные от .column__kind-symbol карты
         this.botPart.textContent = "";
     }
 }
@@ -201,7 +195,11 @@ function Column(element, suit, suitChar){
 let game = {
     playersNum:null,
     currentPlayer:0,
-    hiliteDirectioStyles:["left:0", "top:0","right:0","bottom:-40px"],
+    hiliteDirectioStyles:[null,
+        ["top:0","bottom:-40px"],
+        ["left:0","right:0","bottom:-40px"],
+        ["left:0", "top:0","right:0","bottom:-40px"]
+    ],
     initGame(playersNum){
         this.playersNum = playersNum;
         this.dataStack.generateStack();
@@ -244,8 +242,7 @@ let game = {
         let currentHand = this.hands.getHand(this.currentPlayer)
         let hasProperCards = currentHand.hasOneOfCards(waitingCards);
 
-        //alert("~ ~ ~ ~ > HIs hand empty? "+currentHand.cards.length);
-        currentHand.hiliteHand(this.hiliteDirectioStyles[this.currentPlayer]);
+        currentHand.hiliteHand(this.hiliteDirectioStyles[this.playersNum-1][this.currentPlayer]);
 
         if(currentHand.isHandEmpty()){
             alert("~~~~~~~~~~> Hand empty. The winner is "+this.currentPlayer);
@@ -282,7 +279,6 @@ let game = {
         this.nextPlayerTurn();
     },
     isPlayerHuman(){
-        console.log("isPlayerHuman()",this.currentPlayer);
         return this.currentPlayer==(this.playersNum-1);
     },
     gatherConcreteCards(waitingObjs){
@@ -301,40 +297,30 @@ let game = {
             // debugger;
             
             const restart = this.showCongratulation(this.currentPlayer)
-            /*if(restart) {
-                this.hideCongratulation();
-                this.vanishGame();
-                //  очистить все данные
-                //  аккуратно убрать созданные DOM-элементы
-                this.initGame(this.playersNum);
-                this.startGame();
-            }else{
-                //this.vanishGame();
-                //showMenu();
-            }*/
-            console.log(this.currentPlayer +" - finished");
-            // showMenu();
+            
             return;
         }
         const wasHand = this.hands.getHand(this.currentPlayer);
         wasHand.unhiliteHand();
         let cruNum = this.currentPlayer + 1;
         cruNum = cruNum>=this.playersNum ? 0 : cruNum;
-        // cruNum = cruNum%this.playersNum;// ? 0 : cruNum;
 
         this.currentPlayer = cruNum;
         this.table.changePlayer(this.currentPlayer);
-        console.log("cruNum: "+cruNum);
         this.playerTurn();
     },
     showCongratulation(playerNum){
-        console.log("Show COngrats!", congratsWin);
+        congratulations__flash.classList.add("congratulations__flash_appear");
         congratsWin.style = "display: block; opacity:1; top: 0;";
-        console.log(congratulations__message);
         congratulations__message.innerText = "Great job, mate #"+(playerNum+1)+"!";
+;
+
+        const rewardClassNameIdx = classNameNumberWithPlayers[this.playersNum-1][playerNum];
+        rewardBoxElem.classList.add(rewardBoxStyles[rewardClassNameIdx]);
         //return confirm("11111111111! "+this.currentPlayer+" player. /nDo you want to start a new game?")
     },
     hideCongratulation(){
+        congratulations__flash.classList.remove("congratulations__flash_appear");
         congratsWin.style = "";
         // congratsWin.classList.remove("congratulations_show");
     },
@@ -370,9 +356,7 @@ let game = {
     vanishGame(){
          this.hands.clear();
          this.table.clearTable();
-        //  console.log("no more game, just clear hand/table");
-        //  clear all variables
-
+         rewardBoxElem.className = 'congratulations__reward';
     },
 
     playerLabel:{
@@ -510,7 +494,6 @@ let game = {
         },
 
         clearTable(){
-            console.log("Clear table");
             for(const column of this.columns){
                 column.clearColumn();
             }
@@ -539,10 +522,6 @@ let game = {
         },
         allowUserHand(how){
             
-            /*const allowedCards = this.userHand.domElement.children.filter((elm)=>{
-                elm.classList.some(".user__card_suitable")});
-            console.log("+++++++++++>",allowedCards);*/
-            // const allowedCards = [];
             for(let i=0; i<this.userHand.domElement.children.length; i++){
                 this.userHand.domElement.children[i].style = "pointer-events:"+(how?"auto":"none");
             }
@@ -612,7 +591,13 @@ const congratsWin = document.getElementsByClassName("congratulations")[0];
 const congratsWin__restart = document.getElementById("congr-repeat");
 const congratsWin__menu   = document.getElementById("congr-menu");
 const congratulations__message = document.getElementsByClassName("congratulations__message")[0];
-console.log("Changing congats message about player "+congratulations__message);
+
+const congratulations__flash = document.getElementsByClassName("congratulations__flash")[0];
+const congratulations__reward = document.getElementsByClassName("congratulations__flash")[0];
+const rewardBoxStyles = ["congratulations__reward_left","congratulations__reward_top","congratulations__reward_right","congratulations__reward_bottom"]
+const classNameNumberWithPlayers = [null, [1,3],[0,2,3],[0,1,2,3]];
+const rewardBoxElem = document.getElementsByClassName("congratulations__reward")[0];
+
 
 
 congratsWin__restart.onclick = ()=>{
