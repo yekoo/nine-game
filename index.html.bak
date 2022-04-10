@@ -108,7 +108,7 @@
         <div class="opponentHand hand__left" id="opp__hand_left"></div>
         <div class="user__hand" id="user__hand"></div>
 
-        <div class="playerLabel" id="playerLabel" style="display: none"></div>
+        <!--<div class="playerLabel" id="playerLabel"></div>-->
         <div class="back_btn">
             <img src="./img/mune-back.png">
         </div>

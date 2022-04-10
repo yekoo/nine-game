@@ -44,12 +44,17 @@ function Card(suit, suitChar, rank, rankChar){
     }
 };
 
-function Hand(handId, handIdx){
+function Hand(handId, handIdx, cpuLevel){
     this.domElement = document.getElementById(handId);
     this.getElement = ()=>{ return this.domElement};
     this.cards = null;// []
     this.cardOnClick = null;
     this.handIdx = handIdx;
+    this.cpuLevel = cpuLevel;
+
+    this.cardsInARow = null;
+    this.kindTails = null;
+    //this.cardKindRows = null;
 
 
     this.setOnClick = (handler)=>{
@@ -73,7 +78,12 @@ function Hand(handId, handIdx){
         }
     };
     this.fillCards = (cardArr)=>{
+        console.log(">>>>>>>>> FILLACRDS(), RAZDACHA KART PO PUKAM");
         this.cards = cardArr;
+        this.cardsInARow = this.findRowedCards(this.cards);
+        this.kindTails = this.findAllTails(this.cards);
+        console.log("FillCards");
+        console.log("cardsInARow:",this.cardsInARow, "kindTails", this.kindTails);
         for(let c=0; c<cardArr.length; c++){
             this.domElement.appendChild(cardArr[c].domElement);
         }
@@ -90,13 +100,19 @@ function Hand(handId, handIdx){
         return result;
         
     }
-    this.computerChoose = (tableWaitings, gameInsertHandler, nextTurnHandler)=>{
-        let chosenCard = this.easyCpuChoose(tableWaitings);
+    this.computerChoose = (playerHandCards, gameInsertHandler, nextTurnHandler, cpuLevel, tableWaitingCards)=>{
+        //let chosenCard = this.easyCpuChoose(tableWaitings);
+        // console.log(">>>>>>>>>>>>>>>>>>>>>>>>> level:",{playerHandCards, cpuLevel, tableWaitingCards});
+        let chosenCard = cpuLevel=="normal" ? 
+                this.easyCpuChoose(playerHandCards) : 
+                this.expertCpuChoose(playerHandCards, tableWaitingCards);
+        // console.log(">>>>>>", cpuLevel, chosenCard);
         this.findAndRemoveCard(chosenCard);
+        
         setTimeout(() => {
             gameInsertHandler(chosenCard.domElement);
             nextTurnHandler();
-        }, 300);//  800
+        }, 800);//  300
         //  1900
     }
     this.findAndRemoveCard = (card)=>{
@@ -108,16 +124,100 @@ function Hand(handId, handIdx){
         
         this.cards.splice(index, 1);
     }
+
     this.easyCpuChoose = (waitingCards)=>{
         const randIdx = Math.floor( Math.random() * (waitingCards.length-1));
         return waitingCards[randIdx];
     }
-    this.expertCpuChoose = ()=>{
+    this.expertCpuChoose = (playerHandCards, tableWaitingCards)=>{
+
+        this.cardsInARow;
+        this.kindTails;
+        // console.log('найти имеемые карты на путь к хвостам');
+        // console.log('пока набираются карты к хвостам можно пойти картами, что подряд');
+
+        //  если можно продвигать путь к хвостам, то класть к ним
+        //  (если путь к своим хвостам имеется на руке, то выбирать иные, пути к хвостам)
+        //  пока идет ожидание заполнения пути к хвостам, можно класть порядочные
+        //  если игра больше 2-х игроков, то приоритетней класть "предпоследние карты"
+        
+        // console.log('рандомно выбрать эти карты для хода');
+        
+        arr.shift()
+        return playerHandCards[0];
+    }
+    
+    this.rateByTails = ()=>{
+        //  рейтинг по наличию хвостов на руке
+        this.cardsInARow;
+        this.kindTails;
+    }
+    this.rateByRows = ()=>{
+        //  Отбор по непоследнести 
+    }
+    this.rateByLast = ()=>{
+        //  отбор по хвостатому ходу (удерживание противника)
+    }
+    this.rateByNotPrev = ()=>{
+        //  отбор по степени удержиаемости противника
+    }
+    this.rateByOpponentHand = ()=>{
+        //  отбор по степени удержиаемости противника (удерживание противника)
+    }
+
+    this.findSame = (arr1, arr2)=>{
 
     }
+    this.findRowedCards = (cards)=>{
+        const sorted = this.cards.slice().sort((a, b) => +a.code - +b.code);
+
+        const kindedCards = [[],[],[],[]];
+        for(let crd of sorted){
+            kindedCards[crd.suit].push(crd);
+        }
+        const suitRows = [[],[],[],[]];
+        for(let suite in kindedCards){
+            const suitCads = kindedCards[suite];
+            const rows = [];
+            for(let i=1; i<suitCads.length; i++){
+                if(suitCads[i].rank==suitCads[i-1].rank+1){
+                    const row = [ suitCads[i-1] ];
+                    while(suitCads[i] && suitCads[i].rank == 1+suitCads[i-1].rank){
+                        row.push(suitCads[i]);
+                        i++;
+                    }
+                    rows.push(row);
+                }
+            }
+            suitRows[suite] = rows;
+            console.log();
+        }
+
+        return suitRows;
+        // return this.cardKindRows = suitRows;
+    }
+    this.findAllTails = (playerCards)=>{
+        const suits = [0,1,2,3];
+        const tails = [0,8];
+        const suitTails = [[], [], [], []];
+        for(let suit in suits){
+            for(let rank in tails){
+                const tailCard = playerCards.find( (elm)=> elm.suit==suits[suit] && elm.rank==tails[rank]);
+                suitTails[suit][rank] = tailCard;
+            }
+        }
+        return suitTails;
+    }
+    //  AI expert mind^
+    this.chooseTailedSuitCard = ()=>{
+
+    }
+
+
+
     this.isHandEmpty = ()=>{
         return this.cards.length==0;
-    },
+    }
 
     this.hiliteHand = (shiftStyle)=>{
         this.domElement.style = shiftStyle;
@@ -195,6 +295,8 @@ function Column(element, suit, suitChar){
 let game = {
     playersNum:null,
     currentPlayer:0,
+    cpuLevel:null,
+
     hiliteDirectioStyles:[null,
         ["top:0","bottom:-40px"],
         ["left:0","right:0","bottom:-40px"],
@@ -204,9 +306,11 @@ let game = {
         this.playersNum = playersNum;
         this.dataStack.generateStack();
         this.dataStack.shuffleCards();
+
+        this.cpuLevel = document.querySelector("input[name='cpu-level']:checked").value;
         const dividedStack = this.dataStack.divideStack(this.playersNum);
-        
-        this.hands.fill(dividedStack);
+        console.log("game init CPU LEVEL: "+this.cpuLevel);
+        this.hands.fill(dividedStack, this.cpuLevel);
         
         this.hands.setUserCardOnClick((e)=>{this.playerCardClick(e);});
         
@@ -225,7 +329,6 @@ let game = {
         this.nextPlayerTurn();
     },
     startGame(){
-        //  найти первого игрока
         this.currentPlayer = this.findFirstPlayer();
         
         this.playerTurn();
@@ -237,7 +340,7 @@ let game = {
         const waitingCards = this.table.getWaitingCards();
         //  собрать все икомые объекты Карт из колоды
         const gatheredCards = this.gatherConcreteCards(waitingCards);
-        
+        // console.log("((((( waitingCards", waitingCards);
         //  сверить КАРТЫ текущего игрока с ожидаемыми картами на столе
         let currentHand = this.hands.getHand(this.currentPlayer)
         let hasProperCards = currentHand.hasOneOfCards(waitingCards);
@@ -263,10 +366,13 @@ let game = {
             
             this.hands.allowUserHand(false);
             //      КОМП:    выбрать карту для хода
+            // console.log("CPU LEVEL:", this.cpuLevel);
             this.hands.getHandObject(this.currentPlayer).computerChoose(
                 gatheredCards,
                 (card)=>{this.table.insertCard(card)},
-                ()=>this.nextPlayerTurn()
+                ()=>this.nextPlayerTurn(),
+                this.cpuLevel,
+                waitingCards
             );
         }
         
@@ -529,11 +635,13 @@ let game = {
         },
         
         
-        fill(handsCards){
+        fill(handsCards, cpuLevel){
             this.handsElements = this.getActiveHands(handsCards.length);
             
+            // console.log(this, cpuLevel);
             for(let h=0; h<this.handsElements.length; h++){
-                const hand = new Hand(this.handsElements[h], h);
+                // console.log(this, this.cpuLevel);
+                const hand = new Hand(this.handsElements[h], h, this.cpuLevel);
                 hand.fillCards(handsCards[h]);
                 this.handObjs.push(hand);
                 if(h<this.handsElements.length-1)
@@ -572,13 +680,14 @@ back_btn.onclick = ()=>{showMenu()};
 
 function showMenu(){
     const menuElem = document.getElementById("menu");
-    game.vanishGame();
-    congratsWin.style = "";
-    menuElem.style = "display:block;";
+    setTimeout(()=>{game.vanishGame();},500);
+    congratsWin.style = "top: 0";
+    menuElem.style = "top: 0";   //  display:flex;
 }
 function hideMenu(){
+    congratsWin.style = "top:-100vh;";
     const menuElem = document.getElementById("menu");
-    menuElem.style = "display:none;";
+    menuElem.style = "top: -100vh;"; // display:none;
 }
 function startGame(playersNum){
     // alert("START");
